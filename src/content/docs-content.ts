@@ -168,6 +168,105 @@ docs/**/*.md
 
 渲染层负责阅读体验（导航、搜索、TOC），不负责变更感知。
 `,
+  "docs/reference/roadmap": `
+# Roadmap
+
+RunDoc 以“项目变化驱动文档更新”为主线推进。
+
+## V0.1 Project Docs Skeleton
+
+- 标准化 \`docs/\` 分层目录
+- 初始化 \`.rundoc/config.yml\`
+- 建立 \`.rundoc/state/\` 与 \`.rundoc/reports/\`
+
+## V0.2 Diff Scan
+
+- 实现 \`rundoc scan\`
+- 读取 \`last_commit..HEAD\`
+- 生成影响分析报告
+
+## V0.3 Markdown Patch
+
+- 实现 \`rundoc write\`
+- 对受影响文档生成最小补丁
+- 优先更新已有文档
+
+## V0.4 AI Context Refresh
+
+- 自动刷新 \`docs/04-ai/\` 核心上下文文档
+- 输出 code-change map / acceptance checklist / known inconsistencies
+
+## V0.5 GitLab Integration
+
+- 读取 Issue / MR 元数据
+- 在 MR 生成文档影响评论
+- 对“代码变更未同步文档”给出提醒
+`,
+  "docs/reference/content-model": `
+# Content Model
+
+RunDoc 的数据模型分三层：项目变更、文档目标、补丁产物。
+
+## 1) Change Event
+
+\`\`\`text
+change_id
+base_commit
+head_commit
+changed_paths[]
+commit_messages[]
+detected_at
+\`\`\`
+
+## 2) Impact Mapping
+
+\`\`\`text
+change_id
+impact_domain         # product / technical / ai / ops / business / decisions
+reason
+target_docs[]
+confidence
+needs_human_review
+\`\`\`
+
+## 3) Document Patch
+
+\`\`\`text
+doc_path
+patch_type            # update / create / conflict
+summary
+diff_preview
+applied
+\`\`\`
+
+## 4) Generated Report
+
+\`\`\`text
+run_id
+report_path
+affected_docs[]
+conflicts[]
+followups[]
+\`\`\`
+
+## 5) 站点渲染模型（已有）
+
+\`\`\`text
+doc_id
+path
+title
+section
+tags
+summary
+headings
+chunks
+links
+updated_at
+source_hash
+\`\`\`
+
+以上模型把“文档站渲染”与“项目变更感知”拆开，避免把 RunDoc 降级成纯静态发布器。
+`,
   "docs/guide/writing-docs": `
 # Writing Docs
 
@@ -230,62 +329,12 @@ docs/ai/api-contract.md -> /docs/ai/api-contract
 
 The home route \`/\` is reserved for the landing page.
 `,
-  "docs/reference/roadmap": `
-# Roadmap
+  "docs/07-archive/README": `
+# Archive
 
-RunDoc starts as a static documentation system and grows toward an AI-readable team knowledge layer.
+存放失效或历史版本文档。
 
-## Near Term
-
-- Extract Markdown into typed content.
-- Generate search index and route metadata.
-- Provide a clean React documentation UI.
-- Validate internal Markdown links.
-
-## Next
-
-- Generate document chunks.
-- Generate JSON manifest for AI consumers.
-- Add document freshness checks.
-- Add API server mode.
-
-## Later
-
-- AI-assisted document updates.
-- Change-impact detection.
-- Source-cited answers.
-- Team-specific reading paths.
-`,
-  "docs/reference/content-model": `
-# Content Model
-
-RunDoc documents should compile into a structured model.
-
-\`\`\`text
-doc_id
-path
-title
-section
-tags
-summary
-headings
-chunks
-links
-updated_at
-source_hash
-\`\`\`
-
-## Why This Matters
-
-The content model is the shared contract between:
-
-- the Markdown authoring workflow
-- the rendered documentation site
-- search
-- future AI retrieval
-- future validation jobs
-
-If this model stays stable, teams can evolve the UI and API without changing how documents are written.
+归档文档应保留来源与失效原因，避免与正式文档混淆。
 `,
   "docs/ai/design-principles": `
 # AI Design Principles
@@ -301,6 +350,8 @@ The goal is not to add a chatbot to a static site. The goal is to make team know
 3. Explicit metadata over implicit page interpretation.
 4. Document chunks over whole-page guessing.
 5. Citation paths over ungrounded answers.
+6. Project changes over manual inbox as primary trigger.
+7. Update existing docs over generating detached summaries.
 
 ## Agent Behavior
 
@@ -311,13 +362,15 @@ An AI agent should be able to ask:
 - What changed since the previous build?
 - Which source document supports this answer?
 - Which documents need updates after a code or product change?
+- What changed since last scan commit?
+- Which exact Markdown files should be patched now?
 `,
   "docs/ai/api-contract": `
 # API Contract
 
 RunDoc should expose AI-readable document interfaces.
 
-The first repository version is static, but the API contract is documented early to keep the system direction clear.
+The first repository version is static, but the API contract is documented early to keep system direction clear.
 
 ## Planned Endpoints
 
@@ -328,6 +381,37 @@ GET /api/docs/search?q=
 GET /api/docs/context?path=
 GET /api/docs/related?path=
 POST /api/docs/reindex
+POST /api/rundoc/scan
+POST /api/rundoc/write
+POST /api/rundoc/check
+POST /api/rundoc/commit
+\`\`\`
+
+## RunDoc Engine Response Shape
+
+\`\`\`json
+{
+  "runId": "2026-05-20",
+  "baseCommit": "a1b2c3d",
+  "headCommit": "d4e5f6g",
+  "changes": [
+    {
+      "path": "backend/routes/quotes.py",
+      "type": "modified"
+    }
+  ],
+  "impacts": [
+    {
+      "domain": "technical",
+      "reason": "quotes API route changed",
+      "targetDocs": [
+        "docs/03-technical/api-routes.md"
+      ],
+      "confidence": 0.89
+    }
+  ],
+  "conflicts": []
+}
 \`\`\`
 
 ## Document Response Shape
@@ -360,5 +444,137 @@ POST /api/docs/reindex
   "links": []
 }
 \`\`\`
+`,
+  "docs/06-ops/deployment": `
+# 部署与运维
+
+记录部署配置、运行依赖、常见排障路径。
+
+## 维护规则
+
+1. 配置与脚本变更自动触发文档更新建议。
+2. 部署步骤必须可复制执行。
+3. 风险操作需要前置警告与回滚路径。
+`,
+  "docs/05-decisions/decision-log": `
+# 决策记录
+
+记录关键产品、技术与流程决策。
+
+## 维护规则
+
+1. 每条决策应包含背景、方案、结论、影响范围。
+2. 决策变更应引用对应 commit / MR。
+3. 失效决策应标记归档路径。
+`,
+  "docs/04-ai/known-inconsistencies": `
+# 已知不一致
+
+记录跨文档冲突或未收敛规则，供人工确认。
+
+## 记录格式
+
+- 冲突描述
+- 涉及文档
+- 建议处理方向
+- 当前状态（open/confirmed/resolved）
+`,
+  "docs/04-ai/code-change-map": `
+# Code Change Map
+
+维护“代码变更 -> 文档影响”的映射结果。
+
+## 记录字段
+
+- 变更 commit 范围
+- 影响域
+- 目标文档路径
+- 更新状态
+- 人工确认点
+`,
+  "docs/04-ai/ai-context": `
+# AI Context
+
+供 AI coding agent 读取的项目压缩上下文入口。
+
+## 更新规则
+
+1. 仅由正式文档变更触发刷新。
+2. 不直接引用临时聊天记录作为事实源。
+3. 所有关键规则应能追溯到 \`docs/\` 正式文档与 commit。
+`,
+  "docs/04-ai/acceptance-checklist": `
+# 验收清单
+
+RunDoc 每次文档更新后用于快速验收。
+
+## 检查项
+
+- 是否覆盖本次受影响文档
+- 是否仅做必要最小改动
+- 是否存在跨文档规则冲突
+- 是否标记需要人工确认的问题
+`,
+  "docs/03-technical/api-routes": `
+# API 路由总览
+
+记录后端接口、参数与行为边界。
+
+## 维护规则
+
+1. 接口变更由代码 diff 驱动文档更新。
+2. 更新优先修改已有路由描述，不重复造新文档。
+3. 接口兼容性变化必须记录迁移说明。
+`,
+  "docs/02-business/process-notes": `
+# 业务流程说明
+
+记录业务流、角色边界和交付约束。
+
+## 维护规则
+
+1. 业务流程变化应由项目变化触发更新。
+2. 业务文档需要可追溯到需求、Issue 或 MR。
+3. 与产品、技术或 AI 规则冲突时必须标记待确认。
+`,
+  "docs/01-product/page-specs": `
+# 页面规格
+
+记录当前产品页面行为与关键约束。
+
+## 维护规则
+
+1. 页面行为变化来自代码变更触发，不靠人工汇总。
+2. RunDoc 只对受影响段落做最小更新。
+3. 每次更新需要保留变更来源（commit / MR）。
+`,
+  "docs/00-positioning/overview": `
+# 定位总览
+
+RunDoc 是一个跟随项目变更自动维护 Markdown 文档的系统。
+
+它不是资料收件箱，不依赖人工先整理输入文件。  
+它直接读取项目状态变化，并更新正式文档。
+
+## 核心闭环
+
+\`\`\`text
+Detect -> Understand -> Map -> Patch -> Commit
+\`\`\`
+
+## 输入
+
+- Git diff
+- Commit 历史
+- GitLab Issue / MR（可选）
+- 现有 \`docs/\`
+- \`.rundoc/config.yml\`
+
+## 输出
+
+- \`docs/**/*.md\` 更新
+- \`docs/04-ai/*\` AI 上下文更新
+- \`.rundoc/reports/*.md\` 扫描报告
+- 可审核的提交或 MR 草稿
 `,
 };

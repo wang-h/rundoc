@@ -38,6 +38,32 @@
     ]
   },
   {
+    "title": "Roadmap",
+    "path": "/docs/reference/roadmap",
+    "section": "Reference",
+    "headings": [
+      "Roadmap",
+      "V0.1 Project Docs Skeleton",
+      "V0.2 Diff Scan",
+      "V0.3 Markdown Patch",
+      "V0.4 AI Context Refresh",
+      "V0.5 GitLab Integration"
+    ]
+  },
+  {
+    "title": "Content Model",
+    "path": "/docs/reference/content-model",
+    "section": "Reference",
+    "headings": [
+      "Content Model",
+      "1) Change Event",
+      "2) Impact Mapping",
+      "3) Document Patch",
+      "4) Generated Report",
+      "5) 站点渲染模型（已有）"
+    ]
+  },
+  {
     "title": "Writing Docs",
     "path": "/docs/guide/writing-docs",
     "section": "Guides",
@@ -58,23 +84,11 @@
     ]
   },
   {
-    "title": "Roadmap",
-    "path": "/docs/reference/roadmap",
+    "title": "Archive",
+    "path": "/docs/07-archive/README",
     "section": "Reference",
     "headings": [
-      "Roadmap",
-      "Near Term",
-      "Next",
-      "Later"
-    ]
-  },
-  {
-    "title": "Content Model",
-    "path": "/docs/reference/content-model",
-    "section": "Reference",
-    "headings": [
-      "Content Model",
-      "Why This Matters"
+      "Archive"
     ]
   },
   {
@@ -94,8 +108,101 @@
     "headings": [
       "API Contract",
       "Planned Endpoints",
+      "RunDoc Engine Response Shape",
       "Document Response Shape",
       "Context Response Shape"
+    ]
+  },
+  {
+    "title": "部署与运维",
+    "path": "/docs/06-ops/deployment",
+    "section": "Reference",
+    "headings": [
+      "部署与运维",
+      "维护规则"
+    ]
+  },
+  {
+    "title": "决策记录",
+    "path": "/docs/05-decisions/decision-log",
+    "section": "Reference",
+    "headings": [
+      "决策记录",
+      "维护规则"
+    ]
+  },
+  {
+    "title": "已知不一致",
+    "path": "/docs/04-ai/known-inconsistencies",
+    "section": "Reference",
+    "headings": [
+      "已知不一致",
+      "记录格式"
+    ]
+  },
+  {
+    "title": "Code Change Map",
+    "path": "/docs/04-ai/code-change-map",
+    "section": "Reference",
+    "headings": [
+      "Code Change Map",
+      "记录字段"
+    ]
+  },
+  {
+    "title": "AI Context",
+    "path": "/docs/04-ai/ai-context",
+    "section": "Reference",
+    "headings": [
+      "AI Context",
+      "更新规则"
+    ]
+  },
+  {
+    "title": "验收清单",
+    "path": "/docs/04-ai/acceptance-checklist",
+    "section": "Reference",
+    "headings": [
+      "验收清单",
+      "检查项"
+    ]
+  },
+  {
+    "title": "API 路由总览",
+    "path": "/docs/03-technical/api-routes",
+    "section": "Reference",
+    "headings": [
+      "API 路由总览",
+      "维护规则"
+    ]
+  },
+  {
+    "title": "业务流程说明",
+    "path": "/docs/02-business/process-notes",
+    "section": "Reference",
+    "headings": [
+      "业务流程说明",
+      "维护规则"
+    ]
+  },
+  {
+    "title": "页面规格",
+    "path": "/docs/01-product/page-specs",
+    "section": "Reference",
+    "headings": [
+      "页面规格",
+      "维护规则"
+    ]
+  },
+  {
+    "title": "定位总览",
+    "path": "/docs/00-positioning/overview",
+    "section": "Core",
+    "headings": [
+      "定位总览",
+      "核心闭环",
+      "输入",
+      "输出"
     ]
   }
 ]

@@ -15,6 +15,8 @@ The goal is not to add a chatbot to a static site. The goal is to make team know
 3. Explicit metadata over implicit page interpretation.
 4. Document chunks over whole-page guessing.
 5. Citation paths over ungrounded answers.
+6. Project changes over manual inbox as primary trigger.
+7. Update existing docs over generating detached summaries.
 
 ## Agent Behavior
 
@@ -25,3 +27,5 @@ An AI agent should be able to ask:
 - What changed since the previous build?
 - Which source document supports this answer?
 - Which documents need updates after a code or product change?
+- What changed since last scan commit?
+- Which exact Markdown files should be patched now?

@@ -1,0 +1,30 @@
+project:
+  name: RunDoc
+  docs_root: docs
+
+watch:
+  paths:
+    - src/
+    - scripts/
+    - docs/
+    - package.json
+    - package-lock.json
+    - vite.config.ts
+
+ignore:
+  - node_modules/
+  - dist/
+  - .git/
+
+docs_policy:
+  update_existing_first: true
+  require_review: true
+  ai_docs_are_index_only: true
+
+state:
+  last_commit_file: .rundoc/state/last_commit.txt
+  last_scan_file: .rundoc/state/last_scan.json
+  doc_index_file: .rundoc/state/doc_index.json
+
+reports:
+  output_dir: .rundoc/reports
