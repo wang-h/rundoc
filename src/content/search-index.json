@@ -1,0 +1,95 @@
+[
+  {
+    "title": "Quick Start",
+    "path": "/docs/quick-start",
+    "section": "Core",
+    "headings": [
+      "Quick Start",
+      "Add A Document",
+      "Check Docs"
+    ]
+  },
+  {
+    "title": "Overview",
+    "path": "/docs/overview",
+    "section": "Core",
+    "headings": [
+      "Overview",
+      "Why It Exists",
+      "Current Scope"
+    ]
+  },
+  {
+    "title": "Architecture",
+    "path": "/docs/architecture",
+    "section": "Core",
+    "headings": [
+      "Architecture",
+      "Source Layer",
+      "Build Layer",
+      "App Layer",
+      "AI Layer"
+    ]
+  },
+  {
+    "title": "Roadmap",
+    "path": "/docs/reference/roadmap",
+    "section": "Reference",
+    "headings": [
+      "Roadmap",
+      "Near Term",
+      "Next",
+      "Later"
+    ]
+  },
+  {
+    "title": "Content Model",
+    "path": "/docs/reference/content-model",
+    "section": "Reference",
+    "headings": [
+      "Content Model",
+      "Why This Matters"
+    ]
+  },
+  {
+    "title": "Writing Docs",
+    "path": "/docs/guide/writing-docs",
+    "section": "Guides",
+    "headings": [
+      "Writing Docs",
+      "Pricing Rules",
+      "Good Team Documents",
+      "Markdown Links"
+    ]
+  },
+  {
+    "title": "Navigation",
+    "path": "/docs/guide/navigation",
+    "section": "Guides",
+    "headings": [
+      "Navigation",
+      "Route Rules"
+    ]
+  },
+  {
+    "title": "AI Design Principles",
+    "path": "/docs/ai/design-principles",
+    "section": "AI Interfaces",
+    "headings": [
+      "AI Design Principles",
+      "Principles",
+      "Agent Behavior"
+    ]
+  },
+  {
+    "title": "API Contract",
+    "path": "/docs/ai/api-contract",
+    "section": "AI Interfaces",
+    "headings": [
+      "API Contract",
+      "Planned Endpoints",
+      "Document Response Shape",
+      "Context Response Shape"
+    ]
+  }
+]
