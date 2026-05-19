@@ -3,84 +3,160 @@ export const docsContent = {
   "docs/quick-start": `
 # Quick Start
 
-Install dependencies and build the documentation site.
+RunDoc 的最小工作流不是先整理 inbox，而是先绑定项目并扫描变更。
+
+## 1. 初始化项目结构
+
+在项目根目录准备：
+
+\`\`\`text
+docs/
+  00-positioning/
+  01-product/
+  02-business/
+  03-technical/
+  04-ai/
+  05-decisions/
+  06-ops/
+  07-archive/
+
+.rundoc/
+  config.yml
+  prompts/
+  state/
+  reports/
+\`\`\`
+
+## 2. 运行命令闭环
+
+\`\`\`bash
+rundoc init
+rundoc scan
+rundoc write
+rundoc check
+rundoc commit
+\`\`\`
+
+- \`scan\`: 从 \`last_commit..HEAD\` 生成变更影响报告
+- \`write\`: 更新受影响 Markdown 文档
+- \`check\`: 检查冲突/缺失/过期
+- \`commit\`: 生成可审阅提交
+
+## 3. 报告产物
+
+每次扫描应产出运行报告：
+
+\`\`\`text
+.rundoc/reports/YYYY-MM-DD-run.md
+\`\`\`
+
+报告至少包含：
+
+- 本次项目变化摘要
+- 受影响文档清单
+- 建议更新项
+- 未决冲突与人工确认点
+
+## 4. 文档站本地开发（可选）
+
+当前仓库包含文档站 UI，可用于浏览 \`docs/\`：
 
 \`\`\`bash
 npm install
 npm run build
 npm run dev
 \`\`\`
-
-RunDoc reads Markdown files from \`docs/\` and generates TypeScript content under \`src/content/\`.
-
-## Add A Document
-
-Create a Markdown file:
-
-\`\`\`text
-docs/guide/example.md
-\`\`\`
-
-Add it to navigation in:
-
-\`\`\`text
-src/locales/zh-CN.json
-\`\`\`
-
-Then rebuild:
-
-\`\`\`bash
-npm run build
-\`\`\`
-
-## Check Docs
-
-\`\`\`bash
-npm run check:docs
-\`\`\`
-
-The checker validates known routes and internal Markdown links.
 `,
   "docs/overview": `
 # Overview
 
-RunDoc is an AI-native Markdown documentation system for running teams.
+RunDoc 是一个项目变更驱动的文档自动维护系统。
 
-It keeps Markdown as the source of truth and turns a docs repository into a structured documentation site with navigation, search metadata, table of contents, and predictable document routes.
+它绑定项目仓库，持续感知代码与配置变化，判断哪些文档受影响，并自动生成可审阅的 Markdown 更新。
 
-The product direction is simple:
+## 核心定义
 
-- Keep writing in Markdown.
-- Keep collaborating through Git.
-- Make docs readable for humans.
-- Make docs addressable and reliable for AI agents.
+RunDoc 不以“人工整理材料”为主流程，不要求先手工产出 \`meeting-notes.md\` 或 \`manual-notes.md\` 再汇总。
 
-RunDoc should help a team keep decisions, product rules, SOPs, architecture notes, onboarding paths, and AI operating context in one coherent system.
+RunDoc 的主流程是：
 
-## Why It Exists
+\`\`\`text
+项目变化 -> 影响分析 -> 文档补丁 -> 审核合并
+\`\`\`
 
-Traditional static docs sites are good for publishing pages. Running teams need more than publishing.
+## 输入与输出
 
-They need documents that can be searched, referenced, checked, updated, and passed to AI systems without losing source identity or context.
+输入（项目状态）：
 
-RunDoc is designed around this boundary.
+- Git diff
+- Commit history
+- GitLab Issue / MR（可选）
+- 现有 \`docs/\`
+- \`.rundoc/config.yml\`
+- 可选人工材料（只作为补充）
 
-## Current Scope
+输出（文档变更资产）：
 
-The first version is a static React docs app:
+- \`docs/**/*.md\` 更新
+- \`docs/04-ai/*\` AI 上下文更新
+- 文档一致性检查结果
+- \`.rundoc/reports/*.md\` 扫描报告
+- Draft commit / MR 建议
 
-- Markdown source in \`docs/\`
-- Build-time content generation
-- Search index generation
-- Sidebar navigation from config
-- Document pages with TOC and previous/next links
+## 运行闭环
 
-The AI API layer is documented before implementation so downstream projects can integrate against a stable model.
+\`\`\`text
+Detect -> Understand -> Map -> Patch -> Commit
+\`\`\`
+
+1. Detect: 发现项目变化  
+2. Understand: 理解变化影响  
+3. Map: 映射到具体文档  
+4. Patch: 生成 Markdown 补丁  
+5. Commit: 生成可审核提交
 `,
   "docs/architecture": `
 # Architecture
 
-RunDoc uses a small static build pipeline.
+RunDoc 分为两层：项目变更引擎（核心）和文档站渲染层（当前已实现）。
+
+## 1) Project Watch 引擎（核心）
+
+\`\`\`text
+Git / Repo State
+  -> Detect (diff/commit/MR)
+  -> Understand (impact analysis)
+  -> Map (doc targets)
+  -> Patch (markdown updates)
+  -> Commit (reviewable change)
+\`\`\`
+
+### Detect
+
+读取 \`last_commit..HEAD\` 的变更，覆盖代码、配置、数据库脚本、部署脚本与 \`docs/\` 自身变化。
+
+### Understand
+
+基于路径、提交语义和规则判断变更影响域，例如：
+
+- \`frontend/**\` 影响产品页面文档
+- \`backend/**\` 影响 API/技术文档
+- \`schema.sql\` 影响数据模型文档
+- \`docker-compose.yml\` 影响部署运维文档
+
+### Map
+
+将影响域映射到文档目标路径（优先更新已有文档），并生成待修改清单。
+
+### Patch
+
+对目标 Markdown 生成最小补丁，不重写整篇文档。
+
+### Commit
+
+输出可审阅的分支、提交与报告，不直接跳过人工审核。
+
+## 2) 文档站渲染层（当前）
 
 \`\`\`text
 docs/**/*.md
@@ -90,86 +166,7 @@ docs/**/*.md
   -> React documentation app
 \`\`\`
 
-## Source Layer
-
-Markdown files are the source of truth. Frontmatter may define document metadata such as \`title\`.
-
-## Build Layer
-
-The build script scans Markdown files, extracts headings, creates route keys, and generates a search index.
-
-## App Layer
-
-The React app renders:
-
-- Home page
-- Documentation layout
-- Sidebar
-- Header search
-- Markdown body
-- Page table of contents
-- Previous and next navigation
-
-## AI Layer
-
-The planned AI layer should consume the same document graph generated at build time. It should not scrape rendered HTML.
-`,
-  "docs/reference/roadmap": `
-# Roadmap
-
-RunDoc starts as a static documentation system and grows toward an AI-readable team knowledge layer.
-
-## Near Term
-
-- Extract Markdown into typed content.
-- Generate search index and route metadata.
-- Provide a clean React documentation UI.
-- Validate internal Markdown links.
-
-## Next
-
-- Generate document chunks.
-- Generate JSON manifest for AI consumers.
-- Add document freshness checks.
-- Add API server mode.
-
-## Later
-
-- AI-assisted document updates.
-- Change-impact detection.
-- Source-cited answers.
-- Team-specific reading paths.
-`,
-  "docs/reference/content-model": `
-# Content Model
-
-RunDoc documents should compile into a structured model.
-
-\`\`\`text
-doc_id
-path
-title
-section
-tags
-summary
-headings
-chunks
-links
-updated_at
-source_hash
-\`\`\`
-
-## Why This Matters
-
-The content model is the shared contract between:
-
-- the Markdown authoring workflow
-- the rendered documentation site
-- search
-- future AI retrieval
-- future validation jobs
-
-If this model stays stable, teams can evolve the UI and API without changing how documents are written.
+渲染层负责阅读体验（导航、搜索、TOC），不负责变更感知。
 `,
   "docs/guide/writing-docs": `
 # Writing Docs
@@ -232,6 +229,63 @@ docs/ai/api-contract.md -> /docs/ai/api-contract
 \`\`\`
 
 The home route \`/\` is reserved for the landing page.
+`,
+  "docs/reference/roadmap": `
+# Roadmap
+
+RunDoc starts as a static documentation system and grows toward an AI-readable team knowledge layer.
+
+## Near Term
+
+- Extract Markdown into typed content.
+- Generate search index and route metadata.
+- Provide a clean React documentation UI.
+- Validate internal Markdown links.
+
+## Next
+
+- Generate document chunks.
+- Generate JSON manifest for AI consumers.
+- Add document freshness checks.
+- Add API server mode.
+
+## Later
+
+- AI-assisted document updates.
+- Change-impact detection.
+- Source-cited answers.
+- Team-specific reading paths.
+`,
+  "docs/reference/content-model": `
+# Content Model
+
+RunDoc documents should compile into a structured model.
+
+\`\`\`text
+doc_id
+path
+title
+section
+tags
+summary
+headings
+chunks
+links
+updated_at
+source_hash
+\`\`\`
+
+## Why This Matters
+
+The content model is the shared contract between:
+
+- the Markdown authoring workflow
+- the rendered documentation site
+- search
+- future AI retrieval
+- future validation jobs
+
+If this model stays stable, teams can evolve the UI and API without changing how documents are written.
 `,
   "docs/ai/design-principles": `
 # AI Design Principles

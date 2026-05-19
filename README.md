@@ -1,50 +1,73 @@
 # RunDoc
 
-AI-native Markdown docs for running teams.
+RunDoc 是一个跟随项目变更自动维护 Markdown 文档的 AI-native 文档机器人。  
+一句话：**项目一变，文档就变。**
 
-RunDoc turns Markdown repositories into structured, searchable, AI-readable documentation systems. It is built for teams that need docs to stay useful while products, codebases, and decisions keep changing.
+## 产品定位
 
-## What It Is
+RunDoc 不是资料收件箱，也不是“人先整理会议纪要再让 AI 总结”的系统。  
+RunDoc 直接绑定项目仓库，以项目状态为输入，以文档更新为输出。
 
-RunDoc is not a CMS and not a docsify wrapper. It keeps Markdown as the source of truth, then builds a React documentation system with navigation, search metadata, table of contents, previous/next links, and a future-facing AI context layer.
+核心链路：
 
-## Core Ideas
+```text
+Detect -> Understand -> Map -> Patch -> Commit
+```
 
-- Humans write Markdown.
-- Git tracks every documentation decision.
-- The app renders a clean documentation site.
-- Build scripts generate document content and search indexes.
-- AI agents get stable document IDs, paths, headings, summaries, and future API contracts.
+对应含义：
 
-## Development
+1. Detect: 发现项目变化（Git diff / commit / MR / docs 变化）
+2. Understand: 理解变化影响范围
+3. Map: 映射到目标文档
+4. Patch: 生成并应用 Markdown 补丁
+5. Commit: 产出可审阅提交（分支 / draft MR）
+
+## 推荐目录
+
+```text
+docs/
+  00-positioning/
+  01-product/
+  02-business/
+  03-technical/
+  04-ai/
+  05-decisions/
+  06-ops/
+  07-archive/
+
+.rundoc/
+  config.yml
+  prompts/
+  state/
+  reports/
+```
+
+`docs/` 是正式文档唯一事实源；`.rundoc/` 是运行时配置与状态。
+
+## 命令约定（MVP）
+
+```bash
+rundoc init
+rundoc scan
+rundoc write
+rundoc check
+rundoc commit
+```
+
+- `scan`: 基于 `last_commit..HEAD` 生成影响分析报告
+- `write`: 更新受影响 Markdown 文档（优先更新已有文档）
+- `check`: 检查冲突、缺失、过期
+- `commit`: 生成可审阅文档提交
+
+## 当前仓库说明
+
+这个仓库当前仍包含文档站 UI（React + Vite）能力，用于浏览 `docs/`。  
+后续演进方向是把“变更感知 + 自动文档更新”能力落到 CLI 和自动化流程。
+
+## 开发文档站
 
 ```bash
 npm install
 npm run build
 npm run dev
 ```
-
-## Project Layout
-
-```text
-docs/                  Markdown source
-scripts/build-docs.mjs Build Markdown into src/content
-src/content/           Generated content and search index
-src/components/        Header, Sidebar, TOC
-src/pages/             Home and document pages
-```
-
-## AI Interface Direction
-
-RunDoc is designed to expose stable interfaces such as:
-
-```text
-GET /api/docs/tree
-GET /api/docs/doc/:id
-GET /api/docs/search?q=
-GET /api/docs/context?path=
-GET /api/docs/related?path=
-POST /api/docs/reindex
-```
-
-The first version is a static React app. The API layer is documented first so downstream teams and agents can build against a stable model.

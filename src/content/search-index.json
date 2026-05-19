@@ -5,8 +5,10 @@
     "section": "Core",
     "headings": [
       "Quick Start",
-      "Add A Document",
-      "Check Docs"
+      "1. 初始化项目结构",
+      "2. 运行命令闭环",
+      "3. 报告产物",
+      "4. 文档站本地开发（可选）"
     ]
   },
   {
@@ -15,8 +17,9 @@
     "section": "Core",
     "headings": [
       "Overview",
-      "Why It Exists",
-      "Current Scope"
+      "核心定义",
+      "输入与输出",
+      "运行闭环"
     ]
   },
   {
@@ -25,30 +28,13 @@
     "section": "Core",
     "headings": [
       "Architecture",
-      "Source Layer",
-      "Build Layer",
-      "App Layer",
-      "AI Layer"
-    ]
-  },
-  {
-    "title": "Roadmap",
-    "path": "/docs/reference/roadmap",
-    "section": "Reference",
-    "headings": [
-      "Roadmap",
-      "Near Term",
-      "Next",
-      "Later"
-    ]
-  },
-  {
-    "title": "Content Model",
-    "path": "/docs/reference/content-model",
-    "section": "Reference",
-    "headings": [
-      "Content Model",
-      "Why This Matters"
+      "1) Project Watch 引擎（核心）",
+      "Detect",
+      "Understand",
+      "Map",
+      "Patch",
+      "Commit",
+      "2) 文档站渲染层（当前）"
     ]
   },
   {
@@ -69,6 +55,26 @@
     "headings": [
       "Navigation",
       "Route Rules"
+    ]
+  },
+  {
+    "title": "Roadmap",
+    "path": "/docs/reference/roadmap",
+    "section": "Reference",
+    "headings": [
+      "Roadmap",
+      "Near Term",
+      "Next",
+      "Later"
+    ]
+  },
+  {
+    "title": "Content Model",
+    "path": "/docs/reference/content-model",
+    "section": "Reference",
+    "headings": [
+      "Content Model",
+      "Why This Matters"
     ]
   },
   {
