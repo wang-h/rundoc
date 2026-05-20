@@ -84,14 +84,6 @@
     ]
   },
   {
-    "title": "Archive",
-    "path": "/docs/07-archive/README",
-    "section": "Reference",
-    "headings": [
-      "Archive"
-    ]
-  },
-  {
     "title": "AI Design Principles",
     "path": "/docs/ai/design-principles",
     "section": "AI Interfaces",
@@ -111,6 +103,14 @@
       "RunDoc Engine Response Shape",
       "Document Response Shape",
       "Context Response Shape"
+    ]
+  },
+  {
+    "title": "Archive",
+    "path": "/docs/07-archive/README",
+    "section": "Reference",
+    "headings": [
+      "Archive"
     ]
   },
   {

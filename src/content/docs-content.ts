@@ -329,13 +329,6 @@ docs/ai/api-contract.md -> /docs/ai/api-contract
 
 The home route \`/\` is reserved for the landing page.
 `,
-  "docs/07-archive/README": `
-# Archive
-
-存放失效或历史版本文档。
-
-归档文档应保留来源与失效原因，避免与正式文档混淆。
-`,
   "docs/ai/design-principles": `
 # AI Design Principles
 
@@ -444,6 +437,13 @@ POST /api/rundoc/commit
   "links": []
 }
 \`\`\`
+`,
+  "docs/07-archive/README": `
+# Archive
+
+存放失效或历史版本文档。
+
+归档文档应保留来源与失效原因，避免与正式文档混淆。
 `,
   "docs/06-ops/deployment": `
 # 部署与运维

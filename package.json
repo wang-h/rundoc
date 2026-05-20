@@ -2,7 +2,7 @@
   "name": "rundoc",
   "private": true,
   "version": "0.1.0",
-  "description": "AI-native Markdown docs for running teams.",
+  "description": "AI-Native Markdown Docs for running teams.",
   "type": "module",
   "scripts": {
     "dev": "vite",

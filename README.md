@@ -1,31 +1,27 @@
 # RunDoc
 
-RunDoc 是一个跟随项目变更自动维护 Markdown 文档的 AI-native 文档机器人。  
-一句话：**项目一变，文档就变。**
+RunDoc 是一个**项目变更驱动**的 Markdown 文档维护系统。  
+它的目标很明确：**项目一变，文档就变。**
 
-## 产品定位
+## What RunDoc Is
 
-RunDoc 不是资料收件箱，也不是“人先整理会议纪要再让 AI 总结”的系统。  
-RunDoc 直接绑定项目仓库，以项目状态为输入，以文档更新为输出。
-
-核心链路：
+RunDoc 不是 inbox，不依赖“人工先整理资料再汇总”。  
+RunDoc 绑定仓库状态，按固定引擎执行文档更新：
 
 ```text
 Detect -> Understand -> Map -> Patch -> Commit
 ```
 
-对应含义：
+1. **Detect**: 读取 `git diff` / commit / docs 变化  
+2. **Understand**: 判断影响域（product / technical / ai / ops / ...）  
+3. **Map**: 映射到目标文档  
+4. **Patch**: 生成最小 Markdown 变更  
+5. **Commit**: 输出可审核提交（后续可接 MR）
 
-1. Detect: 发现项目变化（Git diff / commit / MR / docs 变化）
-2. Understand: 理解变化影响范围
-3. Map: 映射到目标文档
-4. Patch: 生成并应用 Markdown 补丁
-5. Commit: 产出可审阅提交（分支 / draft MR）
-
-## 推荐目录
+## Repository Layout
 
 ```text
-docs/
+docs/                         # 正式文档（唯一事实源）
   00-positioning/
   01-product/
   02-business/
@@ -35,39 +31,69 @@ docs/
   06-ops/
   07-archive/
 
-.rundoc/
-  config.yml
-  prompts/
-  state/
-  reports/
+.rundoc/                      # RunDoc 运行目录
+  config.yml                  # 规则配置
+  prompts/                    # 执行提示模板
+  state/                      # last_commit / last_scan / doc_index
+  reports/                    # 每次扫描报告
+
+scripts/rundoc.mjs            # RunDoc CLI (MVP)
 ```
 
-`docs/` 是正式文档唯一事实源；`.rundoc/` 是运行时配置与状态。
+## Current Capabilities (MVP)
 
-## 命令约定（MVP）
+- `scan`: 从 `last_commit..HEAD` 生成变更影响报告  
+- `task`: 生成给 Codex/Claude 的标准执行任务  
+- `check`: 校验 RunDoc 必要结构是否完整  
+- `advance`: 将当前 HEAD 标记为新的扫描基线
 
-```bash
-rundoc init
-rundoc scan
-rundoc write
-rundoc check
-rundoc commit
-```
+## Quick Start
 
-- `scan`: 基于 `last_commit..HEAD` 生成影响分析报告
-- `write`: 更新受影响 Markdown 文档（优先更新已有文档）
-- `check`: 检查冲突、缺失、过期
-- `commit`: 生成可审阅文档提交
-
-## 当前仓库说明
-
-这个仓库当前仍包含文档站 UI（React + Vite）能力，用于浏览 `docs/`。  
-后续演进方向是把“变更感知 + 自动文档更新”能力落到 CLI 和自动化流程。
-
-## 开发文档站
+### 1) Install
 
 ```bash
 npm install
-npm run build
+```
+
+### 2) Run RunDoc Engine
+
+```bash
+node scripts/rundoc.mjs check
+node scripts/rundoc.mjs scan
+node scripts/rundoc.mjs task
+```
+
+扫描结果会写入：
+
+```text
+.rundoc/reports/YYYY-MM-DD-run.md
+.rundoc/reports/YYYY-MM-DD-task.md
+```
+
+### 3) Run Docs UI (React + Vite)
+
+```bash
 npm run dev
 ```
+
+## Automation Pattern
+
+推荐将 RunDoc 挂到定时任务或 CI：
+
+- 每日定时：`check -> scan -> task`
+- MR 合并后：`scan --advance`
+- 人工审核后再执行文档提交
+
+## Status
+
+当前版本提供：
+
+- 项目变更扫描与影响报告
+- 标准化任务提示生成
+- 文档站浏览能力（导航/搜索/TOC）
+
+后续版本将补齐：
+
+- `write`（自动补丁）
+- `commit`（自动分支/提交）
+- GitLab MR 集成与文档一致性门禁
