@@ -38,6 +38,11 @@
   opacity: 0.9;
 }
 
+.home-page__brand-logo {
+  flex-shrink: 0;
+  border-radius: 4px;
+}
+
 .home-page__brand-copy {
   display: block;
   font-size: 14px;

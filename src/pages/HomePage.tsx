@@ -39,6 +39,15 @@ export function HomePage() {
       <header className="home-page__topbar">
         <div className="home-page__topbar-row">
           <Link to="/" className="home-page__brand">
+            <img
+              className="home-page__brand-logo"
+              src={`${import.meta.env.BASE_URL}favicon.svg`}
+              alt=""
+              width={28}
+              height={28}
+              decoding="async"
+              draggable={false}
+            />
             <span className="home-page__brand-copy">
               {common.brandName} {common.docsSuffix}
             </span>
