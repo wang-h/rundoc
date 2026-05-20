@@ -1,7 +1,7 @@
 {
-  "lastScanAt": "2026-05-20T01:19:40.398Z",
-  "baseCommit": "1b00209b5e5abe37035ec4d336702b03008c5316",
-  "headCommit": "122d2d3c912a91fb1ab3ff7c7ab08560c18e286a",
-  "report": ".rundoc/reports/2026-05-20-run.md",
-  "changeCount": 27
+  "lastScanAt": "2026-05-20T01:28:51.785Z",
+  "baseCommit": "122d2d3c912a91fb1ab3ff7c7ab08560c18e286a",
+  "headCommit": "98a7677fa6ab87e77ff2514a4e5f35b91fff187f",
+  "report": ".rundoc/reports/2026-05-20-run-1.md",
+  "changeCount": 9
 }

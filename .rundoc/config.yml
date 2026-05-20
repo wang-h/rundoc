@@ -1,6 +1,12 @@
 project:
   name: RunDoc
   docs_root: docs
+  default_locale: zh-CN
+
+schedule:
+  cadence: daily
+  run_at: "09:00"
+  timezone: "Asia/Shanghai"
 
 watch:
   paths:

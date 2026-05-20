@@ -9,6 +9,11 @@
     "prebuild": "node scripts/build-docs.mjs",
     "build": "vite build",
     "check:docs": "node scripts/check-docs.mjs",
+    "rundoc:init": "node scripts/rundoc.mjs init",
+    "rundoc:check": "node scripts/rundoc.mjs check",
+    "rundoc:scan": "node scripts/rundoc.mjs scan",
+    "rundoc:task": "node scripts/rundoc.mjs task",
+    "rundoc:config": "node scripts/rundoc.mjs config",
     "preview": "vite preview"
   },
   "dependencies": {

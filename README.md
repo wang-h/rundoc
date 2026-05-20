@@ -46,6 +46,7 @@ scripts/rundoc.mjs            # RunDoc CLI (MVP)
 - `task`: 生成给 Codex/Claude 的标准执行任务  
 - `check`: 校验 RunDoc 必要结构是否完整  
 - `advance`: 将当前 HEAD 标记为新的扫描基线
+- `init --rebuild`: 将旧 `docs/` 备份到 `docs_legacy/` 后重建标准文档骨架
 
 ## Quick Start
 
@@ -58,10 +59,19 @@ npm install
 ### 2) Run RunDoc Engine
 
 ```bash
+node scripts/rundoc.mjs init
 node scripts/rundoc.mjs check
 node scripts/rundoc.mjs scan
 node scripts/rundoc.mjs task
 ```
+
+如果是历史项目首轮迁移：
+
+```bash
+node scripts/rundoc.mjs init --rebuild
+```
+
+这会把现有 `docs/` 移动到 `docs_legacy/YYYY-MM-DD/`，并重建标准 `docs/00~07`。
 
 扫描结果会写入：
 
@@ -75,6 +85,49 @@ node scripts/rundoc.mjs task
 ```bash
 npm run dev
 ```
+
+## Configuration (YAML + .env)
+
+RunDoc uses two layers:
+
+1. `.rundoc/config.yml` for project policy  
+2. `.env` for environment overrides
+
+Key fields:
+
+```yaml
+project:
+  default_locale: zh-CN
+
+schedule:
+  cadence: daily
+  run_at: "09:00"
+  timezone: "Asia/Shanghai"
+```
+
+Environment override examples:
+
+```bash
+RUNDOC_DEFAULT_LOCALE=zh-CN
+RUNDOC_SCHEDULE_CADENCE=daily
+RUNDOC_SCHEDULE_RUN_AT=09:00
+RUNDOC_SCHEDULE_TIMEZONE=Asia/Shanghai
+```
+
+Inspect effective runtime config:
+
+```bash
+npm run rundoc:config
+```
+
+## Agent Files vs Tasks
+
+推荐使用“稳定协议 + 每次任务”模式：
+
+- 稳定协议：`.rundoc/agents/AGENT.md`、`.rundoc/agents/CLAUDE.md`
+- 每次任务：`.rundoc/reports/*-task.md`
+
+协议文件定义长期行为约束；任务文件定义本次变更范围。
 
 ## Automation Pattern
 
