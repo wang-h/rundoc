@@ -11,7 +11,10 @@
     "searchPlaceholder": "搜索文档",
     "searchNoResults": "没有匹配的文档",
     "changelogLink": "接口约定",
-    "sourceLink": "GitHub"
+    "sourceLink": "GitHub",
+    "languageLabel": "语言",
+    "languageZh": "中文",
+    "languageEn": "EN"
   },
   "sidebar": {
     "closeOverlayAria": "关闭导航"
@@ -20,11 +23,11 @@
     "excludeNavSection": "开始",
     "navOverview": "概览",
     "navQuickStart": "快速开始",
-    "navDevelopers": "Project Watch",
+    "navDevelopers": "项目观察",
     "navSource": "源码",
-    "heroEyebrow": "AI-Native Markdown Docs",
-    "heroTitle": "Markdown docs for running teams.",
-    "heroLead": "RunDoc turns Markdown repositories into structured, searchable, AI-readable documentation systems. It is built for teams that need docs to stay useful while products, codebases, and decisions keep changing.",
+    "heroEyebrow": "AI 原生 Markdown 文档",
+    "heroTitle": "为持续运转的团队而生的 Markdown 文档系统",
+    "heroLead": "RunDoc 把 Markdown 仓库变成结构化、可搜索、可被 AI 读取的团队文档系统。它面向产品、代码和决策持续变化的团队，让文档不只是发布出来，而是持续保持可用。",
     "actionPrimary": "开始使用",
     "actionSecondary": "阅读概览",
     "panelCapabilities": "RunDoc 能做什么",
@@ -84,19 +87,19 @@
         ]
       },
       {
-        "title": "Project Watch",
+        "title": "项目观察",
         "items": [
           { "title": "定位总览", "path": "/docs/00-positioning/overview", "label": "定位" },
           { "title": "页面规格", "path": "/docs/01-product/page-specs", "label": "产品" },
           { "title": "业务流程说明", "path": "/docs/02-business/process-notes", "label": "业务" },
           { "title": "API 路由总览", "path": "/docs/03-technical/api-routes", "label": "技术" },
-          { "title": "AI Context", "path": "/docs/04-ai/ai-context", "label": "AI" },
-          { "title": "Code Change Map", "path": "/docs/04-ai/code-change-map", "label": "映射" },
+          { "title": "AI 上下文", "path": "/docs/04-ai/ai-context", "label": "AI" },
+          { "title": "代码变更映射", "path": "/docs/04-ai/code-change-map", "label": "映射" },
           { "title": "验收清单", "path": "/docs/04-ai/acceptance-checklist", "label": "验收" },
           { "title": "已知不一致", "path": "/docs/04-ai/known-inconsistencies", "label": "冲突" },
           { "title": "决策记录", "path": "/docs/05-decisions/decision-log", "label": "决策" },
           { "title": "部署与运维", "path": "/docs/06-ops/deployment", "label": "Ops" },
-          { "title": "Archive", "path": "/docs/07-archive/README", "label": "归档" }
+          { "title": "归档", "path": "/docs/07-archive/README", "label": "归档" }
         ]
       },
       {
@@ -107,7 +110,7 @@
         ]
       },
       {
-        "title": "AI-native",
+        "title": "AI 原生",
         "items": [
           { "title": "AI 设计原则", "path": "/docs/ai/design-principles", "label": "原则" },
           { "title": "API 约定", "path": "/docs/ai/api-contract", "label": "接口" }
