@@ -2,6 +2,13 @@
 
 **面向高速运转团队的 AI-native Markdown 文档系统。**
 
+[![Version](https://img.shields.io/badge/version-0.1.0-blue)](https://github.com/wang-h/rundoc)
+[![License](https://img.shields.io/badge/license-TBD-lightgrey)](https://github.com/wang-h/rundoc)
+[![React](https://img.shields.io/badge/React-18-61dafb?logo=react)](https://react.dev/)
+[![Vite](https://img.shields.io/badge/Vite-5-646cff?logo=vite)](https://vitejs.dev/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.6-3178c6?logo=typescript)](https://www.typescriptlang.org/)
+[![AI-Native](https://img.shields.io/badge/AI-Native-8b5cf6)](https://github.com/wang-h/rundoc)
+
 [GitHub Pages](https://wang-h.github.io/rundoc/)
 
 RunDoc 让文档跟随项目一起运行。它读取仓库状态，理解项目变化，将变化映射到正确的 Markdown 文件，并生成可审核的文档更新任务。
@@ -240,6 +247,13 @@ TBD.
 # English
 
 **AI-native Markdown docs for running teams.**
+
+[![Version](https://img.shields.io/badge/version-0.1.0-blue)](https://github.com/wang-h/rundoc)
+[![License](https://img.shields.io/badge/license-TBD-lightgrey)](https://github.com/wang-h/rundoc)
+[![React](https://img.shields.io/badge/React-18-61dafb?logo=react)](https://react.dev/)
+[![Vite](https://img.shields.io/badge/Vite-5-646cff?logo=vite)](https://vitejs.dev/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.6-3178c6?logo=typescript)](https://www.typescriptlang.com/)
+[![AI-Native](https://img.shields.io/badge/AI-Native-8b5cf6)](https://github.com/wang-h/rundoc)
 
 RunDoc keeps documentation close to the work that changes it. It watches repository state, understands what changed, maps those changes to the right Markdown files, and prepares reviewable documentation updates.
 
