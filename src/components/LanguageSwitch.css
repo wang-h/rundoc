@@ -21,11 +21,13 @@
   border: 0;
   border-radius: 4px;
   background: transparent;
-  color: inherit;
+  color: var(--header-muted);
   font-size: 12px;
   font-weight: 600;
   line-height: 1;
   cursor: pointer;
+  -webkit-text-fill-color: currentColor;
+  appearance: none;
 }
 
 .language-switch__option:hover {
@@ -33,11 +35,13 @@
 }
 
 .language-switch__option--active {
-  background: var(--header-fg);
-  color: var(--bg);
+  background: #0a0a0a;
+  color: #ffffff;
+  -webkit-text-fill-color: #ffffff;
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
 }
 
 .language-switch__option--active:hover {
-  color: var(--bg);
+  color: #ffffff;
+  -webkit-text-fill-color: #ffffff;
 }
