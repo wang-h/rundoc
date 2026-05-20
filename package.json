@@ -1,9 +1,19 @@
 {
   "name": "rundoc",
-  "private": true,
+  "private": false,
   "version": "0.1.0",
   "description": "AI-Native Markdown Docs for running teams.",
   "type": "module",
+  "bin": {
+    "rundoc": "./scripts/rundoc.mjs"
+  },
+  "files": [
+    "scripts/",
+    ".rundoc/config.yml",
+    ".rundoc/prompts/",
+    ".rundoc/agents/",
+    "README.md"
+  ],
   "scripts": {
     "dev": "vite",
     "prebuild": "node scripts/build-docs.mjs",
