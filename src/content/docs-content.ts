@@ -448,11 +448,6 @@ POST /api/rundoc/commit
 
 记录部署配置、运维流程与回滚路径。
 `,
-  "docs/05-decisions/decision-log": `
-# 决策记录
-
-记录关键产品、技术与流程决策。
-`,
   "docs/04-ai/known-inconsistencies": `
 # 已知不一致
 
@@ -478,6 +473,16 @@ POST /api/rundoc/commit
 
 记录接口、参数、兼容性与迁移说明。
 `,
+  "docs/05-decisions/decision-log": `
+# 决策记录
+
+记录关键产品、技术与流程决策。
+`,
+  "docs/00-positioning/overview": `
+# 定位总览
+
+RunDoc 是一个项目变更驱动的文档自动维护系统。
+`,
   "docs/02-business/process-notes": `
 # 业务流程说明
 
@@ -487,10 +492,5 @@ POST /api/rundoc/commit
 # 页面规格
 
 记录产品页面行为与边界，随代码变更持续更新。
-`,
-  "docs/00-positioning/overview": `
-# 定位总览
-
-RunDoc 是一个项目变更驱动的文档自动维护系统。
 `,
 };

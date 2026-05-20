@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import { ArrowUpRight, FileText } from 'lucide-react';
+import { LanguageSwitch } from '@/components/LanguageSwitch';
 import { buildNavConfig } from '@/utils/nav-config';
 import { useLocale } from '@/locales/LocaleContext';
 import {
@@ -42,24 +43,27 @@ export function HomePage() {
               {common.brandName} {common.docsSuffix}
             </span>
           </Link>
-          <nav className="home-page__topnav" aria-label="主导航">
-            <Link to="/docs/overview">
-              <NavOverviewIcon aria-hidden {...lucideNav} />
-              {h.navOverview}
-            </Link>
-            <Link to="/docs/quick-start">
-              <NavQuickIcon aria-hidden {...lucideNav} />
-              {h.navQuickStart}
-            </Link>
-            <Link to="/docs/ai/api-contract">
-              <NavDevIcon aria-hidden {...lucideNav} />
-              {h.navDevelopers}
-            </Link>
-            <a href="https://github.com/wang-h/rundoc" target="_blank" rel="noopener noreferrer">
-              <NavSourceIcon aria-hidden {...lucideNav} />
-              {h.navSource}
-            </a>
-          </nav>
+          <div className="home-page__topbar-actions">
+            <nav className="home-page__topnav" aria-label="主导航">
+              <Link to="/docs/overview">
+                <NavOverviewIcon aria-hidden {...lucideNav} />
+                {h.navOverview}
+              </Link>
+              <Link to="/docs/quick-start">
+                <NavQuickIcon aria-hidden {...lucideNav} />
+                {h.navQuickStart}
+              </Link>
+              <Link to="/docs/ai/api-contract">
+                <NavDevIcon aria-hidden {...lucideNav} />
+                {h.navDevelopers}
+              </Link>
+              <a href="https://github.com/wang-h/rundoc" target="_blank" rel="noopener noreferrer">
+                <NavSourceIcon aria-hidden {...lucideNav} />
+                {h.navSource}
+              </a>
+            </nav>
+            <LanguageSwitch className="home-page__language-switch" />
+          </div>
         </div>
       </header>
 

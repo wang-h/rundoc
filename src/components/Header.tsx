@@ -2,6 +2,7 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import searchIndex from '@/content/search-index.json';
 import { useLocale } from '@/locales/LocaleContext';
+import { LanguageSwitch } from './LanguageSwitch';
 import './Header.css';
 
 interface HeaderProps {
@@ -16,7 +17,7 @@ interface SearchEntry {
 }
 
 export function Header({ onMenuToggle }: HeaderProps) {
-  const { t, locale, canSwitch, setLocale } = useLocale();
+  const { t } = useLocale();
   const [query, setQuery] = useState('');
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
@@ -134,18 +135,7 @@ export function Header({ onMenuToggle }: HeaderProps) {
       </div>
 
       <div className="header__right">
-        {canSwitch ? (
-          <label className="header__lang" aria-label={t.header.languageLabel}>
-            <select
-              className="header__lang-select"
-              value={locale}
-              onChange={(e) => setLocale(e.target.value as 'zh-CN' | 'en-US')}
-            >
-              <option value="zh-CN">{t.header.languageZh}</option>
-              <option value="en-US">{t.header.languageEn}</option>
-            </select>
-          </label>
-        ) : null}
+        <LanguageSwitch />
         <Link to="/docs/ai/api-contract" className="header__changelog">
           {t.header.changelogLink}
         </Link>

@@ -122,14 +122,6 @@
     ]
   },
   {
-    "title": "决策记录",
-    "path": "/docs/05-decisions/decision-log",
-    "section": "Reference",
-    "headings": [
-      "决策记录"
-    ]
-  },
-  {
     "title": "已知不一致",
     "path": "/docs/04-ai/known-inconsistencies",
     "section": "Reference",
@@ -170,6 +162,22 @@
     ]
   },
   {
+    "title": "决策记录",
+    "path": "/docs/05-decisions/decision-log",
+    "section": "Reference",
+    "headings": [
+      "决策记录"
+    ]
+  },
+  {
+    "title": "定位总览",
+    "path": "/docs/00-positioning/overview",
+    "section": "Core",
+    "headings": [
+      "定位总览"
+    ]
+  },
+  {
     "title": "业务流程说明",
     "path": "/docs/02-business/process-notes",
     "section": "Reference",
@@ -183,14 +191,6 @@
     "section": "Reference",
     "headings": [
       "页面规格"
-    ]
-  },
-  {
-    "title": "定位总览",
-    "path": "/docs/00-positioning/overview",
-    "section": "Core",
-    "headings": [
-      "定位总览"
     ]
   }
 ]

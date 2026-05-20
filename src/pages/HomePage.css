@@ -54,6 +54,14 @@
   gap: 20px;
 }
 
+.home-page__topbar-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 14px;
+  min-width: 0;
+}
+
 .home-page__topnav a {
   display: inline-flex;
   align-items: center;
@@ -385,6 +393,14 @@
 
   .home-page__topnav {
     display: none;
+  }
+
+  .home-page__topbar-row {
+    gap: 12px;
+  }
+
+  .home-page__topbar-actions {
+    flex-shrink: 0;
   }
 
   .home-page__hero {
