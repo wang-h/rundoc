@@ -3,9 +3,7 @@
 import fs from 'fs';
 import path from 'path';
 import { spawnSync } from 'child_process';
-import { fileURLToPath } from 'url';
-
-const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
+const root = path.resolve(process.env.RUNDOC_ROOT || process.cwd());
 const rundocRoot = path.join(root, '.rundoc');
 const configFile = path.join(rundocRoot, 'config.yml');
 const dotEnvFile = path.join(root, '.env');

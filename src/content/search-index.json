@@ -1,10 +1,26 @@
 [
   {
+    "title": "Archive",
+    "path": "/docs/07-archive/README",
+    "section": "Reference",
+    "headings": [
+      "Archive"
+    ]
+  },
+  {
     "title": "部署与运维",
     "path": "/docs/06-ops/deployment",
     "section": "Reference",
     "headings": [
       "部署与运维"
+    ]
+  },
+  {
+    "title": "决策记录",
+    "path": "/docs/05-decisions/decision-log",
+    "section": "Reference",
+    "headings": [
+      "决策记录"
     ]
   },
   {
@@ -40,27 +56,11 @@
     ]
   },
   {
-    "title": "决策记录",
-    "path": "/docs/05-decisions/decision-log",
-    "section": "Reference",
-    "headings": [
-      "决策记录"
-    ]
-  },
-  {
     "title": "API 路由总览",
     "path": "/docs/03-technical/api-routes",
     "section": "Reference",
     "headings": [
       "API 路由总览"
-    ]
-  },
-  {
-    "title": "Archive",
-    "path": "/docs/07-archive/README",
-    "section": "Reference",
-    "headings": [
-      "Archive"
     ]
   },
   {

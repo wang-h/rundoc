@@ -1,0 +1,236 @@
+# RunDoc
+
+**面向高速运转团队的 AI-native Markdown 文档系统。**
+
+[English](./README.md) · [GitHub Pages](https://wang-h.github.io/rundoc/)
+
+RunDoc 让文档跟随项目一起运行。它读取仓库状态，理解项目变化，将变化映射到正确的 Markdown 文件，并生成可审核的文档更新任务。
+
+```text
+Detect -> Understand -> Map -> Patch -> Commit
+```
+
+## 为什么需要 RunDoc
+
+大多数文档系统解决的是“怎么展示文档”。真实团队更难的问题是：产品和代码每天都在变，文档很快就过期。
+
+RunDoc 把文档视为团队运行系统的一部分：
+
+- Markdown 仍然是唯一事实源。
+- Git 负责审核、历史和协作。
+- AI 读取结构化上下文，而不是猜网页内容。
+- 每次文档更新都应该能追溯到项目变化。
+- 优先更新已有文档，而不是制造孤立总结。
+
+## 产品形态
+
+RunDoc 分为两层。
+
+### 1. 文档引擎
+
+引擎是 AI-native 的核心。
+
+```text
+Git / Repo State
+  -> Detect changed files and commits
+  -> Understand impacted domains
+  -> Map changes to docs
+  -> Patch Markdown
+  -> Commit or prepare review
+```
+
+### 2. 文档站 UI
+
+UI 是一个基于 React + Vite 的文档站，用于阅读 `docs/`。
+
+包含：
+
+- 左侧导航
+- 搜索元数据
+- 页面目录
+- 上一篇 / 下一篇
+- Markdown 渲染
+- 面向 AI 的文档结构
+
+## 仓库结构
+
+```text
+docs/                         正式文档唯一事实源
+  00-positioning/             定位与产品主张
+  01-product/                 产品页面与行为
+  02-business/                业务流程与角色
+  03-technical/               API、数据结构、架构、运行时
+  04-ai/                      AI 上下文、变更地图、验收清单
+  05-decisions/               决策记录
+  06-ops/                     部署与运维
+  07-archive/                 历史或失效文档
+
+.rundoc/                      RunDoc 运行目录
+  config.yml                  项目策略与计划配置
+  prompts/                    稳定提示词模板
+  agents/                     Codex / Claude agent 协议
+  state/                      last_commit、last_scan、doc_index
+  reports/                    扫描报告与任务文件
+
+scripts/rundoc.mjs            RunDoc CLI
+src/                          React 文档站 UI
+```
+
+## CLI
+
+RunDoc 可以通过 npm scripts 使用，也可以本地 link 成 CLI。
+
+```bash
+npm install
+npm link
+rundoc config
+rundoc check
+rundoc scan
+rundoc task
+```
+
+等价 npm scripts：
+
+```bash
+npm run rundoc:config
+npm run rundoc:check
+npm run rundoc:scan
+npm run rundoc:task
+```
+
+### 命令
+
+| 命令 | 用途 |
+| --- | --- |
+| `rundoc init` | 初始化 `.rundoc/` 与标准 docs 结构 |
+| `rundoc init --rebuild` | 将旧 `docs/` 移到 `docs_legacy/` 并重建标准骨架 |
+| `rundoc check` | 校验 RunDoc 必需结构 |
+| `rundoc config` | 输出 YAML + `.env` 后的有效配置 |
+| `rundoc scan` | 分析 `last_commit..HEAD` 并生成影响报告 |
+| `rundoc task` | 根据最新扫描报告生成 agent 任务 |
+| `rundoc advance` | 将当前 `HEAD` 标记为新的扫描基线 |
+
+## 快速开始
+
+```bash
+npm install
+npm run rundoc:init
+npm run rundoc:check
+npm run rundoc:scan
+npm run rundoc:task
+```
+
+启动文档站：
+
+```bash
+npm run dev
+```
+
+构建文档站：
+
+```bash
+npm run build
+npm run check:docs
+```
+
+## 配置
+
+RunDoc 使用 `.rundoc/config.yml` 保存项目策略，使用 `.env` 保存本地覆盖。
+
+```yaml
+project:
+  name: RunDoc
+  docs_root: docs
+  default_locale: zh-CN
+
+schedule:
+  cadence: daily
+  run_at: "09:00"
+  timezone: "Asia/Shanghai"
+```
+
+环境变量覆盖：
+
+```bash
+RUNDOC_DEFAULT_LOCALE=zh-CN
+RUNDOC_SCHEDULE_CADENCE=daily
+RUNDOC_SCHEDULE_RUN_AT=09:00
+RUNDOC_SCHEDULE_TIMEZONE=Asia/Shanghai
+```
+
+## Agent 协议
+
+RunDoc 推荐“稳定协议 + 单次任务”的模式。
+
+稳定协议：
+
+```text
+.rundoc/agents/AGENT.md
+.rundoc/agents/CLAUDE.md
+```
+
+单次任务：
+
+```text
+.rundoc/reports/YYYY-MM-DD-task.md
+```
+
+协议文件定义长期行为边界；任务文件只描述本次项目变化范围。
+
+## AI-native 方向
+
+RunDoc 会为 AI 系统暴露结构化上下文。
+
+计划接口：
+
+```text
+GET /api/docs/tree
+GET /api/docs/doc/:id
+GET /api/docs/search?q=
+GET /api/docs/context?path=
+GET /api/docs/related?path=
+POST /api/rundoc/scan
+POST /api/rundoc/write
+POST /api/rundoc/check
+POST /api/rundoc/commit
+```
+
+长期文档模型：
+
+```text
+doc_id
+path
+title
+section
+summary
+headings
+chunks
+links
+updated_at
+source_hash
+```
+
+## 状态
+
+当前 MVP：
+
+- React + Vite 文档站 UI
+- Markdown 内容构建流程
+- 搜索索引生成
+- 文档结构校验
+- RunDoc CLI 骨架
+- 扫描报告生成
+- agent 任务生成
+- AI agent 协议文件
+
+下一步：
+
+- 自动 Markdown patch
+- 分支 / 提交自动化
+- GitLab MR 集成
+- 文档新鲜度检查
+- 结构化 AI context API
+
+## License
+
+TBD.

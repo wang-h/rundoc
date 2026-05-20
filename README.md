@@ -1,11 +1,10 @@
 # RunDoc
 
-**AI-native Markdown docs for running teams.**  
-**面向高速运转团队的 AI-native Markdown 文档系统。**
+**AI-native Markdown docs for running teams.**
+
+[中文文档](./README.zh-CN.md) · [GitHub Pages](https://wang-h.github.io/rundoc/)
 
 RunDoc keeps documentation close to the work that changes it. It watches repository state, understands what changed, maps those changes to the right Markdown files, and prepares reviewable documentation updates.
-
-RunDoc 的目标不是“多一个文档站”，而是让文档跟随项目一起运行：代码、配置、产品规则一变，文档就能被识别、映射、更新和审核。
 
 ```text
 Detect -> Understand -> Map -> Patch -> Commit
@@ -15,8 +14,6 @@ Detect -> Understand -> Map -> Patch -> Commit
 
 Most documentation systems solve publishing. Running teams have a harder problem: documentation decays as the product changes.
 
-大多数文档系统解决的是“怎么展示文档”。真实团队更难的问题是：产品和代码每天都在变，文档很快就过期。
-
 RunDoc treats documentation as an operational system:
 
 - Markdown remains the source of truth.
@@ -24,14 +21,6 @@ RunDoc treats documentation as an operational system:
 - AI agents receive structured context instead of scraping pages.
 - Every update should be traceable to project changes.
 - Existing docs are patched before new summaries are generated.
-
-RunDoc 把文档视为团队运行系统的一部分：
-
-- Markdown 仍然是唯一事实源。
-- Git 负责审核、历史和协作。
-- AI 读取结构化上下文，而不是猜网页内容。
-- 每次文档更新都应该能追溯到项目变化。
-- 优先更新已有文档，而不是制造孤立总结。
 
 ## Product Shape
 
@@ -220,39 +209,6 @@ links
 updated_at
 source_hash
 ```
-
-## 中文说明
-
-RunDoc 是一个项目变更驱动的 Markdown 文档维护系统。
-
-它不是传统 CMS，也不是 docsify 包装层。RunDoc 关注的是团队运行时的文档问题：当代码、配置、接口、页面和产品规则变化时，系统能判断哪些文档受影响，并生成可审核的更新任务。
-
-核心闭环：
-
-1. **Detect**：读取 Git diff、commit、文档变化。
-2. **Understand**：判断影响域，例如 product、technical、ai、ops。
-3. **Map**：映射到 `docs/` 中的目标文档。
-4. **Patch**：对 Markdown 做最小必要修改。
-5. **Commit**：生成可审核提交或 MR 任务。
-
-推荐使用方式：
-
-```bash
-npm install
-npm link
-rundoc init
-rundoc check
-rundoc scan
-rundoc task
-```
-
-如果是历史项目迁移：
-
-```bash
-rundoc init --rebuild
-```
-
-这会把旧 `docs/` 移到 `docs_legacy/YYYY-MM-DD/`，并生成标准化 `docs/00~07` 文档结构。
 
 ## Status
 

@@ -5,9 +5,11 @@
   "description": "AI-Native Markdown Docs for running teams.",
   "type": "module",
   "bin": {
-    "rundoc": "./scripts/rundoc.mjs"
+    "rundoc-ai": "./bin/rundoc",
+    "rundoc": "./bin/rundoc"
   },
   "files": [
+    "bin/",
     "scripts/",
     ".rundoc/config.yml",
     ".rundoc/prompts/",
