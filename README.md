@@ -1,13 +1,19 @@
 # RunDoc
 
+<p align="center">
+  <img src="https://raw.githubusercontent.com/wang-h/rundoc/main/public/favicon.svg" width="80" alt="RunDoc" />
+</p>
+
 **面向高速运转团队的 AI-native Markdown 文档系统。**
 
-[![Version](https://img.shields.io/badge/version-0.1.0-blue)](https://github.com/wang-h/rundoc)
-[![License](https://img.shields.io/badge/license-TBD-lightgrey)](https://github.com/wang-h/rundoc)
-[![React](https://img.shields.io/badge/React-18-61dafb?logo=react)](https://react.dev/)
-[![Vite](https://img.shields.io/badge/Vite-5-646cff?logo=vite)](https://vitejs.dev/)
-[![TypeScript](https://img.shields.io/badge/TypeScript-5.6-3178c6?logo=typescript)](https://www.typescriptlang.org/)
-[![AI-Native](https://img.shields.io/badge/AI-Native-8b5cf6)](https://github.com/wang-h/rundoc)
+<p align="center">
+  <a href="https://github.com/wang-h/rundoc"><img src="https://img.shields.io/badge/version-0.1.0-blue?style=for-the-badge" alt="Version" /></a>
+  <a href="https://github.com/wang-h/rundoc"><img src="https://img.shields.io/badge/license-TBD-lightgrey?style=for-the-badge" alt="License" /></a>
+  <img src="https://img.shields.io/badge/React-18-61dafb?style=for-the-badge&logo=react" alt="React" />
+  <img src="https://img.shields.io/badge/Vite-5-646cff?style=for-the-badge&logo=vite" alt="Vite" />
+  <img src="https://img.shields.io/badge/TypeScript-5.6-3178c6?style=for-the-badge&logo=typescript" alt="TypeScript" />
+  <img src="https://img.shields.io/badge/AI_Native-8b5cf6?style=for-the-badge" alt="AI-Native" />
+</p>
 
 [GitHub Pages](https://wang-h.github.io/rundoc/)
 
@@ -246,14 +252,20 @@ TBD.
 
 # English
 
+<p align="center">
+  <img src="https://raw.githubusercontent.com/wang-h/rundoc/main/public/favicon.svg" width="80" alt="RunDoc" />
+</p>
+
 **AI-native Markdown docs for running teams.**
 
-[![Version](https://img.shields.io/badge/version-0.1.0-blue)](https://github.com/wang-h/rundoc)
-[![License](https://img.shields.io/badge/license-TBD-lightgrey)](https://github.com/wang-h/rundoc)
-[![React](https://img.shields.io/badge/React-18-61dafb?logo=react)](https://react.dev/)
-[![Vite](https://img.shields.io/badge/Vite-5-646cff?logo=vite)](https://vitejs.dev/)
-[![TypeScript](https://img.shields.io/badge/TypeScript-5.6-3178c6?logo=typescript)](https://www.typescriptlang.com/)
-[![AI-Native](https://img.shields.io/badge/AI-Native-8b5cf6)](https://github.com/wang-h/rundoc)
+<p align="center">
+  <a href="https://github.com/wang-h/rundoc"><img src="https://img.shields.io/badge/version-0.1.0-blue?style=for-the-badge" alt="Version" /></a>
+  <a href="https://github.com/wang-h/rundoc"><img src="https://img.shields.io/badge/license-TBD-lightgrey?style=for-the-badge" alt="License" /></a>
+  <img src="https://img.shields.io/badge/React-18-61dafb?style=for-the-badge&logo=react" alt="React" />
+  <img src="https://img.shields.io/badge/Vite-5-646cff?style=for-the-badge&logo=vite" alt="Vite" />
+  <img src="https://img.shields.io/badge/TypeScript-5.6-3178c6?style=for-the-badge&logo=typescript" alt="TypeScript" />
+  <img src="https://img.shields.io/badge/AI_Native-8b5cf6?style=for-the-badge" alt="AI-Native" />
+</p>
 
 RunDoc keeps documentation close to the work that changes it. It watches repository state, understands what changed, maps those changes to the right Markdown files, and prepares reviewable documentation updates.
 
