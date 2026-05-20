@@ -174,17 +174,6 @@
     ]
   },
   {
-    "title": "归档",
-    "path": "/docs/07-archive/README",
-    "section": "项目观察",
-    "headings": [
-      "归档",
-      "归档标准",
-      "归档流程",
-      "注意事项"
-    ]
-  },
-  {
     "title": "AI 设计原则",
     "path": "/docs/ai/design-principles",
     "section": "AI 原生",
@@ -230,6 +219,17 @@
       "上下文响应结构",
       "错误响应",
       "认证与访问控制"
+    ]
+  },
+  {
+    "title": "归档",
+    "path": "/docs/07-archive/README",
+    "section": "项目观察",
+    "headings": [
+      "归档",
+      "归档标准",
+      "归档流程",
+      "注意事项"
     ]
   },
   {
