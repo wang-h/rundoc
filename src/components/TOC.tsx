@@ -75,7 +75,17 @@ export function TOC({ content }: TOCProps) {
       <ul className="toc__list">
         {headings.map((h) => (
           <li key={h.id} className={`toc__item toc__item--level-${h.level}`}>
-            <a href={`#${h.id}`} className={`toc__link ${activeId === h.id ? 'toc__link--active' : ''}`}>
+            <a
+              href={`#${h.id}`}
+              className={`toc__link ${activeId === h.id ? 'toc__link--active' : ''}`}
+              onClick={(e) => {
+                e.preventDefault();
+                const el = document.getElementById(h.id);
+                if (el) {
+                  el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+              }}
+            >
               {h.text}
             </a>
           </li>
