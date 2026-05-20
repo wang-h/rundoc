@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter, Routes, Route, useParams } from 'react-router-dom';
+import { HashRouter, Routes, Route, useParams } from 'react-router-dom';
 import { DocLayout } from '@/layouts/DocLayout';
 import { HomePage } from '@/pages/HomePage';
 import { DocPage } from '@/pages/DocPage';
@@ -18,11 +18,11 @@ function DocRoute() {
 
 export function App() {
   return (
-    <BrowserRouter basename={import.meta.env.BASE_URL}>
+    <HashRouter>
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/docs/*" element={<DocLayout><DocRoute /></DocLayout>} />
       </Routes>
-    </BrowserRouter>
+    </HashRouter>
   );
 }
