@@ -45,9 +45,9 @@
 
 .home-page__brand-copy {
   display: block;
-  font-size: 14px;
-  font-weight: 600;
-  letter-spacing: -0.02em;
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: -0.03em;
   line-height: 1.2;
   white-space: nowrap;
   color: var(--text);
