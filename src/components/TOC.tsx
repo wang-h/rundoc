@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
+import { slug } from 'github-slugger';
 import { useLocale } from '@/locales/LocaleContext';
 import './TOC.css';
 
@@ -12,15 +13,6 @@ interface TOCProps {
   content: string;
 }
 
-function slugify(text: string): string {
-  return text
-    .toLowerCase()
-    .trim()
-    .replace(/[`*_[\]()]/g, '')
-    .replace(/[^\w\u4e00-\u9fa5\s-]/g, '')
-    .replace(/\s+/g, '-');
-}
-
 function extractHeadings(markdown: string): TocItem[] {
   const headings: TocItem[] = [];
   const lines = markdown.split('\n');
@@ -32,7 +24,7 @@ function extractHeadings(markdown: string): TocItem[] {
     const level = match[1].length;
     const text = match[2].trim();
     headings.push({
-      id: slugify(text),
+      id: slug(text),
       text,
       level,
     });

@@ -47,7 +47,17 @@ function createMarkdownComponents(currentRoute: string) {
       }
       if (resolved.startsWith('#')) {
         return (
-          <a href={resolved} {...props}>
+          <a
+            href={resolved}
+            onClick={(e) => {
+              e.preventDefault();
+              const el = document.getElementById(resolved.slice(1));
+              if (el) {
+                el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+              }
+            }}
+            {...props}
+          >
             {children}
           </a>
         );
