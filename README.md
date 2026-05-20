@@ -4,11 +4,11 @@
   <img src="https://raw.githubusercontent.com/wang-h/rundoc/main/public/favicon.svg" width="80" alt="RunDoc" />
 </p>
 
-**面向高速运转团队的 AI-native Markdown 文档系统。**
+<p align="center"><strong>面向高速运转团队的 AI-native Markdown 文档系统。</strong></p>
 
 <p align="center">
   <a href="https://github.com/wang-h/rundoc"><img src="https://img.shields.io/badge/version-0.1.0-blue?style=for-the-badge" alt="Version" /></a>
-  <a href="https://github.com/wang-h/rundoc"><img src="https://img.shields.io/badge/license-TBD-lightgrey?style=for-the-badge" alt="License" /></a>
+  <a href="https://github.com/wang-h/rundoc"><img src="https://img.shields.io/badge/license-MIT-green?style=for-the-badge" alt="License" /></a>
   <img src="https://img.shields.io/badge/React-18-61dafb?style=for-the-badge&logo=react" alt="React" />
   <img src="https://img.shields.io/badge/Vite-5-646cff?style=for-the-badge&logo=vite" alt="Vite" />
   <img src="https://img.shields.io/badge/TypeScript-5.6-3178c6?style=for-the-badge&logo=typescript" alt="TypeScript" />
@@ -246,7 +246,7 @@ source_hash
 
 ## License
 
-TBD.
+[MIT](LICENSE)
 
 ---
 
@@ -256,11 +256,11 @@ TBD.
   <img src="https://raw.githubusercontent.com/wang-h/rundoc/main/public/favicon.svg" width="80" alt="RunDoc" />
 </p>
 
-**AI-native Markdown docs for running teams.**
+<p align="center"><strong>AI-native Markdown docs for running teams.</strong></p>
 
 <p align="center">
   <a href="https://github.com/wang-h/rundoc"><img src="https://img.shields.io/badge/version-0.1.0-blue?style=for-the-badge" alt="Version" /></a>
-  <a href="https://github.com/wang-h/rundoc"><img src="https://img.shields.io/badge/license-TBD-lightgrey?style=for-the-badge" alt="License" /></a>
+  <a href="https://github.com/wang-h/rundoc"><img src="https://img.shields.io/badge/license-MIT-green?style=for-the-badge" alt="License" /></a>
   <img src="https://img.shields.io/badge/React-18-61dafb?style=for-the-badge&logo=react" alt="React" />
   <img src="https://img.shields.io/badge/Vite-5-646cff?style=for-the-badge&logo=vite" alt="Vite" />
   <img src="https://img.shields.io/badge/TypeScript-5.6-3178c6?style=for-the-badge&logo=typescript" alt="TypeScript" />
@@ -496,4 +496,4 @@ Next:
 
 ## License
 
-TBD.
+[MIT](LICENSE)
