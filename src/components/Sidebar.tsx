@@ -1,6 +1,6 @@
 import { Link, useLocation } from 'react-router-dom';
-import { navConfig } from '@/utils/nav-config';
-import zh from '@/locales/zh-CN.json';
+import { buildNavConfig } from '@/utils/nav-config';
+import { useLocale } from '@/locales/LocaleContext';
 import './Sidebar.css';
 
 interface SidebarProps {
@@ -9,6 +9,8 @@ interface SidebarProps {
 }
 
 export function Sidebar({ isOpen, onClose }: SidebarProps) {
+  const { t } = useLocale();
+  const navConfig = buildNavConfig(t);
   const location = useLocation();
 
   return (
@@ -43,7 +45,7 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
       <button
         className={`sidebar__overlay ${isOpen ? 'sidebar__overlay--visible' : ''}`}
         onClick={onClose}
-        aria-label={zh.sidebar.closeOverlayAria}
+        aria-label={t.sidebar.closeOverlayAria}
       />
     </>
   );

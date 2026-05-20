@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import searchIndex from '@/content/search-index.json';
-import zh from '@/locales/zh-CN.json';
+import { useLocale } from '@/locales/LocaleContext';
 import './Header.css';
 
 interface HeaderProps {
@@ -16,6 +16,7 @@ interface SearchEntry {
 }
 
 export function Header({ onMenuToggle }: HeaderProps) {
+  const { t, locale, canSwitch, setLocale } = useLocale();
   const [query, setQuery] = useState('');
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
@@ -64,7 +65,7 @@ export function Header({ onMenuToggle }: HeaderProps) {
   return (
     <header className="header">
       <div className="header__left">
-        <button className="header__menu-btn" onClick={onMenuToggle} aria-label={zh.header.openMenuAria}>
+        <button className="header__menu-btn" onClick={onMenuToggle} aria-label={t.header.openMenuAria}>
           <span />
           <span />
           <span />
@@ -80,7 +81,7 @@ export function Header({ onMenuToggle }: HeaderProps) {
             draggable={false}
           />
           <span className="header__brand-text">
-            {zh.common.brandName} {zh.common.docsSuffix}
+            {t.common.brandName} {t.common.docsSuffix}
           </span>
         </Link>
       </div>
@@ -94,7 +95,7 @@ export function Header({ onMenuToggle }: HeaderProps) {
           <input
             type="text"
             className="header__search-input"
-            placeholder={zh.header.searchPlaceholder}
+            placeholder={t.header.searchPlaceholder}
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             onFocus={() => setOpen(true)}
@@ -103,7 +104,7 @@ export function Header({ onMenuToggle }: HeaderProps) {
         </div>
 
         {open && query.trim().length >= 2 && (
-          <div className="header__search-dropdown" role="listbox" aria-label={zh.header.searchPlaceholder}>
+          <div className="header__search-dropdown" role="listbox" aria-label={t.header.searchPlaceholder}>
             {results.length > 0 ? (
               results.map((item) => (
                 <Link
@@ -125,7 +126,7 @@ export function Header({ onMenuToggle }: HeaderProps) {
               ))
             ) : (
               <div className="header__search-empty" role="status">
-                {zh.header.searchNoResults}
+                {t.header.searchNoResults}
               </div>
             )}
           </div>
@@ -133,11 +134,23 @@ export function Header({ onMenuToggle }: HeaderProps) {
       </div>
 
       <div className="header__right">
+        {canSwitch ? (
+          <label className="header__lang" aria-label={t.header.languageLabel}>
+            <select
+              className="header__lang-select"
+              value={locale}
+              onChange={(e) => setLocale(e.target.value as 'zh-CN' | 'en-US')}
+            >
+              <option value="zh-CN">{t.header.languageZh}</option>
+              <option value="en-US">{t.header.languageEn}</option>
+            </select>
+          </label>
+        ) : null}
         <Link to="/docs/ai/api-contract" className="header__changelog">
-          {zh.header.changelogLink}
+          {t.header.changelogLink}
         </Link>
         <a href="https://github.com/wang-h/rundoc" target="_blank" rel="noopener noreferrer" className="header__github">
-          {zh.header.sourceLink}
+          {t.header.sourceLink}
         </a>
       </div>
     </header>

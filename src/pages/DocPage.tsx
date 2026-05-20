@@ -4,9 +4,9 @@ import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import rehypeSlug from 'rehype-slug';
 import { TOC } from '@/components/TOC';
-import { findNavItem, getPrevNext } from '@/utils/nav-config';
+import { buildNavConfig, findNavItem, getPrevNext } from '@/utils/nav-config';
 import { resolveMarkdownHref } from '@/utils/markdown-links';
-import zh from '@/locales/zh-CN.json';
+import { useLocale } from '@/locales/LocaleContext';
 import './DocPage.css';
 
 /** 行内/块内 code 区分：块级一般带 `language-` class；无 class 视为行内 */
@@ -70,9 +70,9 @@ interface DocPageProps {
   rawContent?: string;
 }
 
-function extractTitle(markdown: string): string {
+function extractTitle(markdown: string, fallback: string): string {
   const match = /^#\s+(.+)$/m.exec(markdown);
-  return match ? match[1].trim() : zh.docPage.untitled;
+  return match ? match[1].trim() : fallback;
 }
 
 function stripLeadingSummary(markdown: string): { summary: string; body: string } {
@@ -94,19 +94,20 @@ function stripLeadingSummary(markdown: string): { summary: string; body: string 
 }
 
 export function DocPage({ rawContent = '' }: DocPageProps) {
+  const { t } = useLocale();
   const location = useLocation();
-  const navItem = findNavItem(location.pathname);
-  const { prev, next } = getPrevNext(location.pathname);
+  const navConfig = buildNavConfig(t);
+  const navItem = findNavItem(navConfig, location.pathname);
+  const { prev, next } = getPrevNext(navConfig, location.pathname);
   const markdownComponents = useMemo(() => createMarkdownComponents(location.pathname), [location.pathname]);
-
-  const title = useMemo(() => extractTitle(rawContent), [rawContent]);
+  const title = useMemo(() => extractTitle(rawContent, t.docPage.untitled), [rawContent, t.docPage.untitled]);
   const { summary, body } = useMemo(() => stripLeadingSummary(rawContent), [rawContent]);
 
   return (
     <article className="doc-page">
       <div className="doc-page__main">
         <div className="doc-page__meta">
-          <p className="doc-page__section">{navItem?.section.title || zh.docPage.sectionFallback}</p>
+          <p className="doc-page__section">{navItem?.section.title || t.docPage.sectionFallback}</p>
           <h1 className="doc-page__title">{title}</h1>
           {summary && (
             <div className="doc-page__summary doc-page__prose">
@@ -131,7 +132,7 @@ export function DocPage({ rawContent = '' }: DocPageProps) {
           <nav className="doc-page__pager">
             {prev ? (
               <Link to={prev.path} className="doc-page__pager-link">
-                <span className="doc-page__pager-label">{zh.docPage.pagerPrev}</span>
+                <span className="doc-page__pager-label">{t.docPage.pagerPrev}</span>
                 <strong>{prev.title}</strong>
               </Link>
             ) : (
@@ -139,7 +140,7 @@ export function DocPage({ rawContent = '' }: DocPageProps) {
             )}
             {next ? (
               <Link to={next.path} className="doc-page__pager-link doc-page__pager-link--next">
-                <span className="doc-page__pager-label">{zh.docPage.pagerNext}</span>
+                <span className="doc-page__pager-label">{t.docPage.pagerNext}</span>
                 <strong>{next.title}</strong>
               </Link>
             ) : null}

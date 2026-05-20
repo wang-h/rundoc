@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import { ArrowUpRight, FileText } from 'lucide-react';
-import { navConfig } from '@/utils/nav-config';
-import zh from '@/locales/zh-CN.json';
+import { buildNavConfig } from '@/utils/nav-config';
+import { useLocale } from '@/locales/LocaleContext';
 import {
   audiencePathIcon,
   capabilityIcons,
@@ -28,7 +28,9 @@ const { primary: CtaPrimaryIcon, secondary: CtaSecondaryIcon } = homeCtaIcons;
 const { capabilities: PanelCapIcon, audiences: PanelAudIcon } = homePanelIcons;
 
 export function HomePage() {
-  const { home: h, homeAudiences, homeCapabilities, common } = zh;
+  const { t } = useLocale();
+  const navConfig = buildNavConfig(t);
+  const { home: h, homeAudiences, homeCapabilities, common } = t;
   const EyebrowIcon = PanelCapIcon;
 
   return (

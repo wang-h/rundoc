@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
-import zh from '@/locales/zh-CN.json';
+import { useLocale } from '@/locales/LocaleContext';
 import './TOC.css';
 
 interface TocItem {
@@ -42,6 +42,7 @@ function extractHeadings(markdown: string): TocItem[] {
 }
 
 export function TOC({ content }: TOCProps) {
+  const { t } = useLocale();
   const headings = useMemo(() => extractHeadings(content), [content]);
   const [activeId, setActiveId] = useState('');
 
@@ -70,7 +71,7 @@ export function TOC({ content }: TOCProps) {
 
   return (
     <aside className="toc">
-      <p className="toc__eyebrow">{zh.toc.eyebrow}</p>
+      <p className="toc__eyebrow">{t.toc.eyebrow}</p>
       <ul className="toc__list">
         {headings.map((h) => (
           <li key={h.id} className={`toc__item toc__item--level-${h.level}`}>

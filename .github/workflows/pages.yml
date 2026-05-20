@@ -35,6 +35,8 @@ jobs:
         run: npm run build
         env:
           VITE_BASE_PATH: /rundoc/
+          VITE_DEFAULT_LOCALE: zh-CN
+          VITE_I18N_MODE: switchable
 
       - name: Setup Pages
         uses: actions/configure-pages@v5

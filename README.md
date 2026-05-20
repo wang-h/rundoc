@@ -156,7 +156,20 @@ RUNDOC_DEFAULT_LOCALE=zh-CN
 RUNDOC_SCHEDULE_CADENCE=daily
 RUNDOC_SCHEDULE_RUN_AT=09:00
 RUNDOC_SCHEDULE_TIMEZONE=Asia/Shanghai
+VITE_DEFAULT_LOCALE=zh-CN
+VITE_I18N_MODE=locked
 ```
+
+UI language mode:
+
+- `VITE_I18N_MODE=locked`: fixed team language, no switch button
+- `VITE_I18N_MODE=switchable`: show language switch, persist user choice
+- `VITE_I18N_MODE=auto`: detect browser language first, then persist user choice
+
+GitHub Pages deployment uses bilingual UI by default:
+
+- `VITE_DEFAULT_LOCALE=zh-CN`
+- `VITE_I18N_MODE=switchable`
 
 ## Agent Protocol
 

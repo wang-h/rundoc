@@ -203,6 +203,22 @@
   grid-column: 3;
 }
 
+.header__lang {
+  display: inline-flex;
+  align-items: center;
+}
+
+.header__lang-select {
+  height: 32px;
+  padding: 0 10px;
+  border-radius: var(--radius);
+  border: 1px solid var(--header-field-line);
+  background: transparent;
+  color: var(--header-fg);
+  font-size: 12px;
+  font-weight: 500;
+}
+
 .header__changelog {
   display: inline-flex;
   align-items: center;
