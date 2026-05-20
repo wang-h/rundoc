@@ -1,196 +1,361 @@
 [
   {
-    "title": "Quick Start",
+    "title": "快速开始",
     "path": "/docs/quick-start",
-    "section": "Core",
+    "section": "开始",
     "headings": [
-      "Quick Start",
+      "快速开始",
+      "前置要求",
+      "环境配置",
+      "RunDoc 配置文件路径（默认为项目根目录 .rundoc/）",
+      "AI 模型接口配置（用于影响分析和补丁生成）",
+      "日志级别",
       "1. 初始化项目结构",
+      "在项目根目录执行初始化",
       "2. 运行命令闭环",
+      "rundoc scan",
+      "rundoc write",
+      "rundoc check",
+      "rundoc commit",
       "3. 报告产物",
-      "4. 文档站本地开发（可选）"
+      "RunDoc 运行报告 — 2026-05-20",
+      "变更摘要",
+      "受影响文档（3 个）",
+      "人工确认点",
+      "冲突",
+      "4. 文档站本地开发（可选）",
+      "验证安装",
+      "1. 验证 CLI 可用",
+      "2. 验证项目初始化状态",
+      "3. 执行一次扫描测试（需要有待扫描的提交）",
+      "4. 验证文档站构建",
+      "常见问题",
+      "`rundoc: command not found`",
+      "或者",
+      "扫描提示\"无变更\"",
+      "文档站构建失败：`npm run build` 报错",
+      "补丁内容不准确",
+      "文档哈希不匹配警告",
+      "下一步"
     ]
   },
   {
-    "title": "Overview",
+    "title": "概览",
     "path": "/docs/overview",
-    "section": "Core",
+    "section": "开始",
     "headings": [
-      "Overview",
+      "概览",
       "核心定义",
+      "为什么选择 AI Native 路线",
       "输入与输出",
-      "运行闭环"
+      "输入输出示例",
+      "运行闭环",
+      "第一步：Detect（发现变化）",
+      "第二步：Understand（理解影响）",
+      "第三步：Map（映射到文档）",
+      "第四步：Patch（生成补丁）",
+      "第五步：Commit（提交审阅）",
+      "闭环的意义",
+      "与传统文档系统对比"
     ]
   },
   {
-    "title": "Architecture",
+    "title": "架构",
     "path": "/docs/architecture",
-    "section": "Core",
+    "section": "开始",
     "headings": [
-      "Architecture",
-      "1) Project Watch 引擎（核心）",
-      "Detect",
-      "Understand",
-      "Map",
-      "Patch",
-      "Commit",
-      "2) 文档站渲染层（当前）"
+      "架构",
+      "1) 项目观察引擎（核心）",
+      "发现变化（Detect）",
+      "理解影响（Understand）",
+      "映射文档（Map）",
+      "生成补丁（Patch）",
+      "提交审阅（Commit）",
+      "两层架构设计理由",
+      "完整流程示例",
+      "场景：开发者新增了报价功能",
+      "扩展点与自定义",
+      "文档站渲染层（当前已实现）"
     ]
   },
   {
-    "title": "Roadmap",
+    "title": "路线图",
     "path": "/docs/reference/roadmap",
-    "section": "Reference",
+    "section": "参考",
     "headings": [
-      "Roadmap",
-      "V0.1 Project Docs Skeleton",
-      "V0.2 Diff Scan",
-      "V0.3 Markdown Patch",
-      "V0.4 AI Context Refresh",
-      "V0.5 GitLab Integration"
+      "路线图",
+      "V0.1 项目文档骨架",
+      "V0.2 差异扫描",
+      "V0.3 Markdown 补丁",
+      "V0.4 AI 上下文刷新",
+      "V0.5 GitLab 集成"
     ]
   },
   {
-    "title": "Content Model",
+    "title": "内容模型",
     "path": "/docs/reference/content-model",
-    "section": "Reference",
+    "section": "参考",
     "headings": [
-      "Content Model",
-      "1) Change Event",
-      "2) Impact Mapping",
-      "3) Document Patch",
-      "4) Generated Report",
-      "5) 站点渲染模型（已有）"
+      "内容模型",
+      "1) 变更事件",
+      "2) 影响映射",
+      "3) 文档补丁",
+      "4) 生成报告",
+      "5) 站点渲染模型（已有）",
+      "模型关系图",
+      "设计理念"
     ]
   },
   {
-    "title": "Writing Docs",
+    "title": "编写文档",
     "path": "/docs/guide/writing-docs",
-    "section": "Guides",
+    "section": "使用指南",
     "headings": [
-      "Writing Docs",
-      "Pricing Rules",
-      "Good Team Documents",
-      "Markdown Links"
+      "编写文档",
+      "Frontmatter 字段",
+      "计费规则",
+      "字段说明",
+      "Frontmatter 最佳实践",
+      "文档结构最佳实践",
+      "标题层级",
+      "页面拆分原则",
+      "信息组织模式",
+      "AI 友好写作规范",
+      "明确指代",
+      "结构化信息",
+      "订单状态",
+      "概念溯源",
+      "避免的写法",
+      "Markdown 链接",
+      "链接规范",
+      "Markdown 高级功能",
+      "代码块",
+      "Shell 命令",
+      "表格",
+      "提示块",
+      "任务列表",
+      "上线检查清单",
+      "图片",
+      "文件命名规范",
+      "文档更新提醒"
     ]
   },
   {
-    "title": "Navigation",
+    "title": "组织导航",
     "path": "/docs/guide/navigation",
-    "section": "Guides",
+    "section": "使用指南",
     "headings": [
-      "Navigation",
-      "Route Rules"
+      "组织导航",
+      "基本结构",
+      "路由规则",
+      "路由与导航的关系",
+      "导航组织模式",
+      "平铺模式（适合文档量较小）",
+      "嵌套模式（适合中型文档库）",
+      "角色导向模式（适合跨职能团队）",
+      "按读者类型组织章节",
+      "新人（第一天）",
+      "日常使用者（每天）",
+      "决策者（需要时）",
+      "AI Agent（程序化读取）",
+      "添加新导航项",
+      "1. 创建 Markdown 文件",
+      "2. 添加导航配置",
+      "3. 验证",
+      "国际化导航配置",
+      "同步规则",
+      "配置检查清单",
+      "常用场景",
+      "添加新章节",
+      "重新排序",
+      "隐藏文档",
+      "临时文档入口",
+      "文件组织建议"
     ]
   },
   {
-    "title": "AI Design Principles",
-    "path": "/docs/ai/design-principles",
-    "section": "AI Interfaces",
-    "headings": [
-      "AI Design Principles",
-      "Principles",
-      "Agent Behavior"
-    ]
-  },
-  {
-    "title": "API Contract",
-    "path": "/docs/ai/api-contract",
-    "section": "AI Interfaces",
-    "headings": [
-      "API Contract",
-      "Planned Endpoints",
-      "RunDoc Engine Response Shape",
-      "Document Response Shape",
-      "Context Response Shape"
-    ]
-  },
-  {
-    "title": "Archive",
+    "title": "归档",
     "path": "/docs/07-archive/README",
-    "section": "Reference",
+    "section": "项目观察",
     "headings": [
-      "Archive"
+      "归档",
+      "归档标准",
+      "归档流程",
+      "注意事项"
+    ]
+  },
+  {
+    "title": "AI 设计原则",
+    "path": "/docs/ai/design-principles",
+    "section": "AI 原生",
+    "headings": [
+      "AI 设计原则",
+      "什么是 AI Native（AI 原生）",
+      "三层分级",
+      "AI Native 的核心特征",
+      "设计原则",
+      "原则详解",
+      "AI Native 文档 vs 传统静态文档",
+      "对 RunDoc 文档体系意味着什么",
+      "文档即 API",
+      "双向流动",
+      "人类角色的变化",
+      "与 SSG 的关系",
+      "Agent 行为与工作场景",
+      "Agent 的核心能力",
+      "典型工作场景",
+      "Agent 的工作边界"
+    ]
+  },
+  {
+    "title": "API 约定",
+    "path": "/docs/ai/api-contract",
+    "section": "AI 原生",
+    "headings": [
+      "API 约定",
+      "计划接口",
+      "接口详细说明",
+      "GET /api/docs/tree",
+      "GET /api/docs/doc/:id",
+      "GET /api/docs/search?q=",
+      "GET /api/docs/context?path=",
+      "GET /api/docs/related?path=",
+      "POST /api/docs/reindex",
+      "POST /api/rundoc/scan",
+      "POST /api/rundoc/write",
+      "POST /api/rundoc/check",
+      "POST /api/rundoc/commit",
+      "RunDoc 引擎响应结构",
+      "文档响应结构",
+      "上下文响应结构",
+      "错误响应",
+      "认证与访问控制"
     ]
   },
   {
     "title": "部署与运维",
     "path": "/docs/06-ops/deployment",
-    "section": "Reference",
+    "section": "项目观察",
     "headings": [
-      "部署与运维"
-    ]
-  },
-  {
-    "title": "已知不一致",
-    "path": "/docs/04-ai/known-inconsistencies",
-    "section": "Reference",
-    "headings": [
-      "已知不一致"
-    ]
-  },
-  {
-    "title": "Code Change Map",
-    "path": "/docs/04-ai/code-change-map",
-    "section": "Reference",
-    "headings": [
-      "Code Change Map"
-    ]
-  },
-  {
-    "title": "AI Context",
-    "path": "/docs/04-ai/ai-context",
-    "section": "Reference",
-    "headings": [
-      "AI Context"
-    ]
-  },
-  {
-    "title": "验收清单",
-    "path": "/docs/04-ai/acceptance-checklist",
-    "section": "Reference",
-    "headings": [
-      "验收清单"
-    ]
-  },
-  {
-    "title": "API 路由总览",
-    "path": "/docs/03-technical/api-routes",
-    "section": "Reference",
-    "headings": [
-      "API 路由总览"
+      "部署与运维",
+      "部署方式",
+      "构建命令",
+      "运维关注点",
+      "回滚路径"
     ]
   },
   {
     "title": "决策记录",
     "path": "/docs/05-decisions/decision-log",
-    "section": "Reference",
+    "section": "项目观察",
     "headings": [
-      "决策记录"
+      "决策记录",
+      "记录格式",
+      "决策类型",
+      "示例",
+      "2026-05-20：文档站采用 HashRouter"
     ]
   },
   {
-    "title": "定位总览",
-    "path": "/docs/00-positioning/overview",
-    "section": "Core",
+    "title": "已知不一致",
+    "path": "/docs/04-ai/known-inconsistencies",
+    "section": "项目观察",
     "headings": [
-      "定位总览"
+      "已知不一致",
+      "一致性检查规则",
+      "处理流程",
+      "当前已知项"
+    ]
+  },
+  {
+    "title": "代码变更映射",
+    "path": "/docs/04-ai/code-change-map",
+    "section": "项目观察",
+    "headings": [
+      "代码变更映射",
+      "映射规则",
+      "前端代码（`frontend/`、`src/`、`components/`）",
+      "后端代码（`backend/`、`api/`、`routes/`）",
+      "基础设施（`docker-compose.yml`、`Dockerfile`、`deploy/`）",
+      "数据层（`migrations/`、`schema.sql`、`models/`）",
+      "自定义规则"
+    ]
+  },
+  {
+    "title": "AI 上下文",
+    "path": "/docs/04-ai/ai-context",
+    "section": "项目观察",
+    "headings": [
+      "AI 上下文",
+      "上下文内容",
+      "刷新时机",
+      "使用方式",
+      "格式要求"
+    ]
+  },
+  {
+    "title": "验收清单",
+    "path": "/docs/04-ai/acceptance-checklist",
+    "section": "项目观察",
+    "headings": [
+      "验收清单",
+      "内容验收",
+      "结构验收",
+      "AI 可读验收",
+      "一致性验收"
+    ]
+  },
+  {
+    "title": "API 路由总览",
+    "path": "/docs/03-technical/api-routes",
+    "section": "项目观察",
+    "headings": [
+      "API 路由总览",
+      "文档站 API（计划中）",
+      "文档读取",
+      "文档管理",
+      "引擎操作",
+      "兼容性"
     ]
   },
   {
     "title": "业务流程说明",
     "path": "/docs/02-business/process-notes",
-    "section": "Reference",
+    "section": "项目观察",
     "headings": [
-      "业务流程说明"
+      "业务流程说明",
+      "文档维护流程",
+      "角色分工",
+      "交付边界"
     ]
   },
   {
     "title": "页面规格",
     "path": "/docs/01-product/page-specs",
-    "section": "Reference",
+    "section": "项目观察",
     "headings": [
-      "页面规格"
+      "页面规格",
+      "首页（`/`）",
+      "文档页（`/docs/*`）",
+      "页面交互"
+    ]
+  },
+  {
+    "title": "定位总览",
+    "path": "/docs/00-positioning/overview",
+    "section": "项目观察",
+    "headings": [
+      "定位总览",
+      "解决什么问题",
+      "真实场景：文档腐烂是如何发生的",
+      "与其他工具的比较",
+      "关键差异点",
+      "1. 双向绑定：代码 ↔ 文档",
+      "2. 文档作为一个可查询的知识图谱",
+      "3. 运行闭环而非单次快照",
+      "不是什么",
+      "适用场景",
+      "不适用场景"
     ]
   }
 ]

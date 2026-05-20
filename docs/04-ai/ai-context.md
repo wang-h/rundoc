@@ -1,7 +1,33 @@
 ---
-title: AI Context
+title: AI 上下文
 ---
 
-# AI Context
+# AI 上下文
 
-供 AI coding agent 使用的项目压缩上下文。
+供 AI coding agent 使用的项目压缩上下文，在每次 `rundoc write` 后自动刷新。
+
+## 上下文内容
+
+本文件会被自动生成为 AI agent 的项目概览，包含：
+
+- 项目定位与核心概念
+- 当前技术栈与关键依赖
+- 目录结构与模块职责
+- 最近变更摘要
+- 已知问题与待办事项
+
+## 刷新时机
+
+- 每次 `rundoc write` 运行后
+- 代码变更涉及核心模块时
+- 手动执行 `rundoc write --context-only`
+
+## 使用方式
+
+AI coding agent 在工作前读取本文件，快速建立项目心智模型。建议将其作为 agent 的 system prompt 附件或项目上下文注入。
+
+## 格式要求
+
+- 控制总长度在 2000 字以内，保证 agent 上下文窗口内可容纳
+- 优先列出"当前状态"而非历史信息
+- 使用结构化列表，避免长段落

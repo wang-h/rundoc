@@ -1,37 +1,222 @@
 ---
-title: Writing Docs
+title: 编写文档
 ---
 
-# Writing Docs
+# 编写文档
 
-Write documents in plain Markdown.
+使用纯 Markdown 编写文档。RunDoc 会将 Markdown 文件自动转换为文档站页面。
 
-Use a single `#` heading for the page title. Use frontmatter when the navigation or search title should differ from the visible heading.
+每个页面只使用一个 `#` 一级标题作为页面标题。当前端导航或搜索标题需要和页面可见标题不一致时，可以使用 frontmatter。
+
+## Frontmatter 字段
+
+RunDoc 支持在 Markdown 文件顶部使用 YAML frontmatter 定义页面元数据。完整字段如下：
 
 ```md
 ---
-title: Pricing Rules
+title: 计费规则          # 页面标题（覆盖 H1，影响导航和搜索显示）
+description: 本文档...    # 页面摘要（用于搜索预览和 SEO）
+order: 4                 # 排序权重（数值越小越靠前，默认按文件名字母序）
+label: 计费               # 导航短标签（侧边栏显示用，默认使用 title）
 ---
 
-# Pricing Rules
+# 计费规则
 ```
 
-## Good Team Documents
+### 字段说明
 
-Good RunDoc documents should be:
+| 字段 | 类型 | 必填 | 说明 |
+|------|------|------|------|
+| `title` | string | 否 | 覆盖页面一级标题，影响导航标题和搜索结果显示。当希望导航标题比页面可见标题更简短时特别有用。 |
+| `description` | string | 否 | 页面摘要说明，用于搜索结果预览和 SEO meta description。建议控制在 120 字以内。 |
+| `order` | number | 否 | 侧边栏排序权重，数值越小排序越靠前。同一目录下的文件默认按文件名字母顺序排列，设置 order 可以覆盖默认排序。 |
+| `label` | string | 否 | 侧边栏显示的短标签，当 title 过长不适合导航展示时使用。未设置时默认使用 title。 |
 
-- Sourceable: every rule has a clear owner or origin.
-- Addressable: each document has a stable path.
-- Chunkable: headings divide content into useful sections.
-- Actionable: explain what someone should do, not only what exists.
-- AI-readable: avoid vague references such as "this", "that", or "above" when a named concept is clearer.
+### Frontmatter 最佳实践
 
-## Markdown Links
+- **`title` 保持简洁**：导航标题控制在 8 个字以内。如果页面标题较长（如"2024 Q4 产品迭代回顾与数据复盘"），用 `title` 设置简短版本（如"Q4 复盘"）。
+- **`description` 写清楚页面内容**：不要重复标题，而是说明读者能从中获得什么信息。好的描述：`"本文档梳理了计费系统的价格规则、优惠逻辑和异常处理流程"`，不好的描述：`"本文档是关于计费的"`。
+- **`order` 用于固定排序**：当文件命名无法体现顺序时（如 `api-design.md` 应该在 `api-implementation.md` 之前），用 order 固定位置。
+- **`label` 仅当必要时使用**：大多数情况下留空，让系统自动使用 title。
 
-Prefer relative links between documents:
+## 文档结构最佳实践
+
+好的文档结构让读者和 AI Agent 都能快速定位信息。以下是一些经过验证的实践：
+
+### 标题层级
+
+- **一个页面只用一个 H1**（`#`），作为页面唯一的一级标题。
+- **H2（`##`）用于主要章节**，每个 H2 应该是一个独立的话题。读者可以通过目录直接跳到关心的章节。
+- **H3（`###`）用于子话题**，当 H2 下的内容需要进一步拆分时使用。避免使用超过 H4 的深度，过深的层级说明内容应该拆分到独立页面。
+- **标题要有信息量**：`## 退款规则` 比 `## 规则` 好，`## 如何申请退款` 比 `## 退款` 好。
+
+### 页面拆分原则
+
+- 一个页面对应一个清晰的主题。如果读者问"XX 怎么做"，应该能指出唯一一个页面。
+- 页面内容控制在 300-800 行之间。过短的内容可能是碎片信息，考虑合并到相关页面；过长的页面难以维护和导航，考虑按子主题拆分。
+- 拆分时使用文件夹组织：`docs/billing/refund.md` 比 `docs/billing-refund.md` 更好。
+
+### 信息组织模式
+
+常用的文档组织模式：
+
+- **概念 → 规则 → 操作**：先解释"是什么"，再说明"规则是什么"，最后给出"怎么做"。
+- **概述 → 详细 → 示例**：先给全景，再讲细节，最后用示例验证理解。
+- **问题 → 方案 → 注意事项**：适用于决策类文档，先说清楚要解决什么问题。
+
+## AI 友好写作规范
+
+RunDoc 为 AI Agent 提供结构化读取接口，为了让 AI 准确理解和引用你的文档，写作时注意以下规范：
+
+### 明确指代
+
+避免模糊指代，使用明确的概念名称：
+
+- **避免**："这个接口返回上面的数据"、"那个字段需要注意"
+- **推荐**："`/api/users` 接口返回用户基本信息"、"`status` 字段的枚举值需要特别注意"
+
+AI Agent 通过解析段落文字来理解内容关系，模糊指代会破坏语义关联。
+
+### 结构化信息
+
+对于规则类内容，优先使用列表和表格：
 
 ```md
-[Architecture](../architecture.md)
+## 订单状态
+
+订单有四种状态，变更规则如下：
+
+| 状态 | 含义 | 可变更到 | 触发条件 |
+|------|------|----------|----------|
+| `pending` | 待支付 | `paid`, `cancelled` | 用户操作 |
+| `paid` | 已支付 | `refunding`, `shipped` | 系统/人工 |
+| `shipped` | 已发货 | `completed`, `returning` | 物流回调 |
+| `completed` | 已完成 | — | 终态 |
 ```
 
-RunDoc resolves internal Markdown links into documentation routes.
+表格比纯文字描述更容易被 AI 解析和引用。
+
+### 概念溯源
+
+当文档中引用某个规则或决策时，链接到源文档而不是复述：
+
+```md
+订单退款遵循[退款规则](./refund.md)中的时效要求，特殊情况处理见[异常订单处理 SOP](../ops/abnormal-orders.md)。
+```
+
+这让 AI 能够追踪依赖链，自动构建知识图谱。
+
+### 避免的写法
+
+- **不要用截图代替文字**：AI 无法读取图片中的文字。关键信息必须用文字表达，截图只能作为辅助说明。
+- **不要在标题中使用装饰符号**：`## ✨ 功能介绍` 应改为 `## 功能介绍`。装饰符号不影响 AI 理解但会干扰精确匹配。
+- **不要在一个段落中混杂多个独立主题**：每个段落只讨论一个主题，方便 AI 定位和引用。
+
+## Markdown 链接
+
+文档之间优先使用相对链接：
+
+```md
+[架构](../architecture.md)
+[退款规则](./billing/refund.md)
+[部署指南](../06-ops/deployment.md)
+```
+
+### 链接规范
+
+- **内部链接使用相对路径**：基于当前文件位置计算相对路径，这样仓库移动或重命名时链接仍然有效。
+- **链接到 `.md` 文件**：RunDoc 会自动将 `.md` 链接解析为文档站路由。例如 `./refund.md` 解析为 `/docs/billing/refund`。
+- **锚点链接**：可以链接到页面内的标题锚点。标题中的空格和特殊字符会被转换为连字符。
+
+```md
+[退款时效规则](./refund.md#退款时效规则)
+[API 错误码](../03-technical/api-routes.md#错误码说明)
+```
+
+- **外部链接**：使用完整 URL，RunDoc 会保留原样。
+
+```md
+[Markdown 语法参考](https://commonmark.org/help/)
+```
+
+## Markdown 高级功能
+
+### 代码块
+
+使用围栏代码块展示代码、配置和命令：
+
+````md
+```typescript
+// 带语言标识的代码块会自动高亮
+interface DocPage {
+  title: string
+  path: string
+  content: string
+}
+```
+
+```bash
+# Shell 命令
+npm run build
+```
+````
+
+支持的语言标识包括：`typescript`、`javascript`、`python`、`bash`、`json`、`yaml`、`sql`、`markdown` 等。
+
+### 表格
+
+表格适合结构化数据的展示：
+
+```md
+| 参数 | 类型 | 必填 | 默认值 | 说明 |
+|------|------|------|--------|------|
+| `pageSize` | number | 否 | 20 | 每页条数 |
+| `cursor` | string | 否 | — | 分页游标 |
+```
+
+### 提示块
+
+使用 blockquote 配合标记来创建提示信息：
+
+```md
+> **注意**：此接口需要管理员权限。
+
+> **提示**：建议在测试环境先验证退款逻辑。
+```
+
+### 任务列表
+
+```md
+## 上线检查清单
+
+- [ ] 数据库迁移脚本已执行
+- [ ] API 文档已更新
+- [ ] 前端页面已部署
+```
+
+### 图片
+
+图片使用相对路径引用，放在与文档相同的目录下：
+
+```md
+![退款流程图](./images/refund-flow.png)
+```
+
+> **注意**：AI Agent 无法读取图片内容，请在图片周围提供足够的文字说明。
+
+## 文件命名规范
+
+- 使用小写字母和连字符：`api-design.md` 而不是 `API_Design.md`
+- 文件名应该能表达文档主题：`refund-rules.md` 而不是 `doc1.md`
+- 避免在文件名中使用日期，除非该日期本身就是文档的关键信息
+- `README.md` 保留给目录索引页
+
+## 文档更新提醒
+
+当文档内容过时时，有三种方式标记：
+
+1. 在 frontmatter 中设置 `status: draft` 标记未完成的文档
+2. 在文档顶部使用提示块说明当前状态
+3. 通过 Git commit message 标注文档变更类型（`docs:` 前缀）
+
+保持文档新鲜是团队知识管理的核心——过时的文档比没有文档更危险。

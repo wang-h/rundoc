@@ -1,41 +1,37 @@
 import {
   type LucideIcon,
   BookOpen,
-  Boxes,
   Brain,
   Code2,
   Compass,
   Github,
   Inbox,
-  LayoutGrid,
   Library,
-  Lightbulb,
   Rocket,
   Rss,
   Send,
   Sparkles,
   Tags,
-  Terminal,
   TrendingUp,
   Users,
   Workflow,
   Zap,
 } from 'lucide-react';
 
-/** 按文档分区标题映射（与 zh-CN nav.sections.title 一致） */
+/** 按文档分区标题映射（与 nav.sections.title 一致） */
 export const sectionTitleIcon: Record<string, LucideIcon> = {
-  理解系统: Lightbulb,
-  核心功能: Boxes,
-  功能与页面: LayoutGrid,
-  开发文档: Code2,
-  参考资料: Library,
+  开始: Compass,
+  项目观察: Rss,
+  使用指南: BookOpen,
+  'AI 原生': Brain,
+  参考: Library,
 };
 
 /** 「按角色开始」各入口（按 homeAudiences.path） */
 export const audiencePathIcon: Record<string, LucideIcon> = {
-  '/docs/quick-start': Terminal,
-  '/docs/concepts': Brain,
-  '/docs/features/article-workbench': Workflow,
+  '/docs/guide/writing-docs': Workflow,
+  '/docs/architecture': Code2,
+  '/docs/ai/api-contract': Brain,
   '/docs/overview': Compass,
 };
 

@@ -18,11 +18,14 @@ function filePathToRoute(relativePath) {
 }
 
 function getSection(relativePath) {
-  if (relativePath.startsWith('guide/')) return 'Guides';
-  if (relativePath.startsWith('ai/')) return 'AI Interfaces';
-  if (relativePath.startsWith('reference/')) return 'Reference';
-  if (['overview.md', 'quick-start.md', 'architecture.md'].includes(path.basename(relativePath))) return 'Core';
-  return 'Reference';
+  if (relativePath.startsWith('guide/')) return '使用指南';
+  if (relativePath.startsWith('ai/')) return 'AI 原生';
+  if (relativePath.startsWith('reference/')) return '参考';
+  if (relativePath.startsWith('00-') || relativePath.startsWith('01-') || relativePath.startsWith('02-') ||
+      relativePath.startsWith('03-') || relativePath.startsWith('04-') || relativePath.startsWith('05-') ||
+      relativePath.startsWith('06-') || relativePath.startsWith('07-')) return '项目观察';
+  if (['overview.md', 'quick-start.md', 'architecture.md'].includes(path.basename(relativePath))) return '开始';
+  return '参考';
 }
 
 function extractHeadings(content) {

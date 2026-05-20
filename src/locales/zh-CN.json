@@ -25,9 +25,9 @@
     "navQuickStart": "快速开始",
     "navDevelopers": "项目观察",
     "navSource": "源码",
-    "heroEyebrow": "AI 原生 Markdown 文档",
-    "heroTitle": "为持续运转的团队而生的 Markdown 文档系统",
-    "heroLead": "RunDoc 把 Markdown 仓库变成结构化、可搜索、可被 AI 读取的团队文档系统。它面向产品、代码和决策持续变化的团队，让文档不只是发布出来，而是持续保持可用。",
+    "heroEyebrow": "AI 原生 · Markdown 驱动 · 为运转中的团队设计",
+    "heroTitle": "文档不应该发布即过时。RunDoc 让团队文档持续保持新鲜、可搜索、可被 AI 读取。",
+    "heroLead": "RunDoc 把 Markdown 仓库变成结构化、可搜索、可被 AI 读取的团队文档系统。不同于一次性生成的静态文档站，RunDoc 面向产品、代码和决策持续变化的团队——它追踪文档新鲜度，暴露变更映射，为 AI Agent 提供稳定读取接口。无论你是产品经理、工程师还是团队负责人，都能让文档从「写完之后就没人看」变成「团队每天都在用的运行系统」。",
     "actionPrimary": "开始使用",
     "actionSecondary": "阅读概览",
     "panelCapabilities": "RunDoc 能做什么",
@@ -36,31 +36,34 @@
   "homeAudiences": [
     {
       "title": "产品与运营团队",
-      "description": "把 SOP、规则、决策和交付文档留在 Markdown 中，同时让系统生成导航、搜索和阅读路径。",
+      "description": "把 SOP、规则、决策和交付文档保留在 Markdown 中，同时让系统自动生成导航、搜索和分角色阅读路径。不必再维护 Wiki 和文档站两套结构——所有内容集中在 Git 仓库，构建时自动产出可导航的文档站点。",
       "path": "/docs/guide/writing-docs"
     },
     {
       "title": "工程团队",
-      "description": "用 Git 管理文档，构建时生成索引，让文档站和代码仓库保持同一套协作方式。",
+      "description": "用 Git 管理文档，构建时生成索引，让文档站和代码仓库保持同一套协作方式。每一次文档变更都有清晰的版本历史，代码审查流程自然覆盖文档更新，文档和代码不再脱节。",
       "path": "/docs/architecture"
     },
     {
       "title": "AI Agent",
-      "description": "读取结构化 tree、doc、search、context 和 manifest，而不是抓网页猜内容。",
+      "description": "读取结构化 tree、doc、search、context 和 manifest，而不是抓网页猜内容。RunDoc 为 AI 提供稳定的结构化读取接口——Agent 可以精确引用文档段落，获取上下文关联，判断文档新鲜度，做出更可靠的决策。",
       "path": "/docs/ai/api-contract"
     },
     {
       "title": "团队负责人",
-      "description": "把不断变化的团队知识做成可运行的知识系统，而不是一次性静态文档站。",
+      "description": "把不断变化的团队知识做成可运行的知识系统，而不是一次性静态文档站。实时了解哪些文档过期了、哪些部分缺内容、哪些变更影响最大——用数据驱动的方式管理团队知识资产，而不是凭感觉维护文档。",
       "path": "/docs/overview"
     }
   ],
   "homeCapabilities": [
-    "从 Markdown 生成可导航文档站",
-    "生成搜索索引和文档元数据",
-    "保留 Git 友好的人类写作流程",
-    "为 AI 预留稳定读取和引用接口",
-    "支持按团队角色组织阅读路径"
+    "从 Markdown 仓库自动生成可导航的文档站点",
+    "构建搜索索引和文档结构化元数据",
+    "保留 Git 友好的纯文本写作工作流",
+    "为 AI Agent 提供结构化上下文读取与引用接口",
+    "支持按团队角色组织差异化阅读路径",
+    "追踪文档与项目变更的映射关系，暴露影响范围",
+    "监控文档新鲜度，自动标记需要更新的内容",
+    "支持中英文双语导航与内容切换"
   ],
   "docPage": {
     "untitled": "无标题",

@@ -1,31 +1,202 @@
 ---
-title: AI Design Principles
+title: AI 设计原则
 ---
 
-# AI Design Principles
+# AI 设计原则
 
-RunDoc is designed for AI systems from the data model upward.
+RunDoc 从数据模型开始就面向 AI 系统设计。
 
-The goal is not to add a chatbot to a static site. The goal is to make team knowledge structured enough that AI can retrieve, cite, update, and validate it.
+目标不是给静态站点加一个聊天窗口，而是让团队知识足够结构化，使 AI 可以检索、引用、更新和校验它。
 
-## Principles
+## 什么是 AI Native（AI 原生）
 
-1. Stable IDs over visual scraping.
-2. Markdown source over generated HTML.
-3. Explicit metadata over implicit page interpretation.
-4. Document chunks over whole-page guessing.
-5. Citation paths over ungrounded answers.
-6. Project changes over manual inbox as primary trigger.
-7. Update existing docs over generating detached summaries.
+AI Native 不是一个营销术语。它是一个系统架构立场：**AI 是第一等使用者，而非事后附加的功能**。
 
-## Agent Behavior
+### 三层分级
 
-An AI agent should be able to ask:
+| 层级 | 定义 | 文档系统举例 |
+|------|------|-------------|
+| **传统系统** | 设计时完全不考虑 AI 消费。数据封闭、结构隐式、依赖视觉呈现。 | 打印版 PDF、纯 Word 文档、Confluence（无 API） |
+| **AI 增强（AI-Augmented）** | 在传统系统上加一层 AI 访问通道。底层数据模型未变。 | VitePress + 聊天插件、Notion AI、Docusaurus + RAG |
+| **AI 原生（AI-Native）** | 从数据模型到触发机制都为 AI 设计。AI 不仅能读，还能写、引用、校验、触发更新。 | RunDoc |
 
-- Which documents exist?
-- Which sections relate to this task?
-- What changed since the previous build?
-- Which source document supports this answer?
-- Which documents need updates after a code or product change?
-- What changed since last scan commit?
-- Which exact Markdown files should be patched now?
+### AI Native 的核心特征
+
+一个 AI Native 的文档系统必须具备以下能力：
+
+1. **可寻址性（Addressability）**：每个知识单元有稳定、唯一的 ID，AI 可以精确引用到段落级别
+2. **可写性（Writability）**：AI 不仅能读取文档，还能生成结构化的文档补丁，而非脱离上下文的自由文本
+3. **可校验性（Verifiability）**：AI 的每次输出都绑定到具体源文档和变更上下文，输出可追溯、可审阅
+4. **变更感知（Change Awareness）**：系统能自动检测项目状态变化（代码、配置、Issue），作为文档更新的触发器
+5. **闭环反馈（Closed-Loop Feedback）**：文档更新后能反向通知相关方，形成"变更 → 文档 → 审阅 → 合并"的完整回路
+
+**通俗理解**：如果 AI 是团队的一个成员，传统文档相当于"锁在柜子里的纸质手册"，AI 增强文档相当于"给了 AI 一份复印件"，AI 原生文档相当于"给了 AI 编辑权限和变更通知系统"。
+
+## 设计原则
+
+### 原则详解
+
+**1. 稳定 ID 优先于视觉抓取**
+
+每个知识单元（段落、章节、图表）必须有稳定、不可变的 ID。AI 通过 ID 引用内容，而非依赖页面布局或 CSS 选择器。
+
+- **反面案例**：AI 说"在第三段第二句提到..."——换行或重排后立即失效
+- **正面案例**：AI 引用 `doc:api-auth:para-3`——无论页面如何重排，引用永远有效
+- **实现方式**：RunDoc 在构建时为每个 Markdown 段落自动生成基于内容的哈希 ID，既稳定又可自动发现新增内容
+
+**2. Markdown 源文件优先于生成后的 HTML**
+
+AI 直接操作 Markdown 源文件，而非渲染后的 HTML。Markdown 是结构化文本，HTML 是视觉呈现。
+
+- **为什么重要**：HTML 包含大量布局、样式、脚本噪音；Markdown 只有内容结构
+- **实际效果**：AI 生成的补丁是标准的 `docs/**/*.md` diff，可以用 `git diff` 审阅，用 `git merge` 合并
+- **与 SSG 的关系**：VitePress/Docusaurus 等 SSG 仍然可用作渲染层，但 AI 工作在源文件层
+
+**3. 显式元数据优先于隐式页面解读**
+
+文档结构通过 frontmatter、目录约定、交叉引用显式声明，而不是让 AI 猜测"这个页面大概是做什么的"。
+
+- **隐式解读的问题**：AI 从页面标题推测内容类型，准确率低且不稳定
+- **显式元数据**：`title`、`section`、`refs`、`status`、`owner` 等字段让 AI 精确定位
+- **RunDoc 的做法**：frontmatter + 目录约定（`00-定位/`、`01-产品/` 等）+ `.rundoc/config.yml` 全局配置
+
+**4. 文档分块优先于整页猜测**
+
+文档按逻辑块（段落、代码块、表格、列表）分块索引，AI 检索的是"相关的块"而不是"相关的页面"。
+
+- **整页检索的问题**：一个 2000 行的页面中，AI 需要的可能只是 20 行，但被迫消费整个页面
+- **分块策略**：以 Markdown 语义单元为边界（`##` 标题、代码围栏、列表组），块大小控制在 200-500 tokens
+- **效果**：检索精度大幅提升，AI 回答的依据更具体，幻觉率降低
+
+**5. 可引用路径优先于无依据回答**
+
+AI 的每次输出必须标注支撑它的源文档路径和块 ID。如果找不到依据，AI 应该声明"无依据"而非编造。
+
+- **消除幻觉**：强制引用路径让 AI 在回答前先"找到依据"，找不到就承认不知道
+- **审阅便利**：人类审阅者可以点击引用路径直接跳转到源文档
+- **引用格式**：`来源: docs/03-technical/api-routes.md#L42-L58`
+
+**6. 项目变化优先于人工收件箱，作为主要触发源**
+
+文档更新的触发器是项目状态的实际变化（Git 提交、配置变更、Issue 关闭），而非某人的"想起来更新文档"。
+
+- **传统流程**：有人发现文档过时 → 在 Slack 喊一声 → 可能有人更新 → 可能没有
+- **RunDoc 流程**：Git Hook 检测到 `api-routes.ts` 变更 → 分析影响范围 → 生成 `docs/03-technical/api-routes.md` 补丁 → 提交 MR
+- **关键洞察**：代码变更本身就是最强的"文档需要更新"信号，不需要人工中转
+
+**7. 优先更新已有文档，而不是生成脱离上下文的摘要**
+
+AI 的默认行为应该是修改现有的文档文件，而非在旁边生成一个新的 `summary-2024-03-15.md`。
+
+- **为什么重要**：生成新文件而不更新旧文件，导致知识分散、版本混乱、最终无人维护
+- **RunDoc 的做法**：AI 分析出"这次 API 变更影响 `docs/03-technical/api-routes.md` 第 42-58 行"，生成精确的补丁
+- **对比**：传统 AI 工具倾向于"基于这段代码，生成一份文档"，结果是又一个没人看的文件
+
+## AI Native 文档 vs 传统静态文档
+
+| 维度 | 传统静态文档 | AI 增强文档 | AI Native 文档（RunDoc） |
+|------|-------------|------------|------------------------|
+| **主要消费者** | 人类读者 | 人类读者 + AI 辅助检索 | AI Agent + 人类审阅者 |
+| **更新触发** | 人工"想起来" | 人工"想起来" | 项目变化自动触发 |
+| **数据格式** | HTML / PDF | Markdown + 向量索引 | 结构化 Markdown + 块级 ID + 元数据索引 |
+| **AI 角色** | 无 | 只读（问答） | 读写（检索、引用、更新、校验） |
+| **引用粒度** | 页面级别 | 段落/页面级别 | 段落/块级别，带稳定 ID |
+| **版本追踪** | 页面级 diff | 页面级 diff | 块级变更追踪 + 影响分析 |
+| **反馈回路** | 无 | 无 | 变更 → 补丁 → 审阅 → 合并 |
+| **知识腐烂** | 高（随时间衰减） | 中（仍依赖人工） | 低（自动化维护） |
+
+## 对 RunDoc 文档体系意味着什么
+
+### 文档即 API
+
+在 AI Native 体系下，`docs/` 目录不只是人类阅读的手册——它是 AI Agent 的程序接口。每个 `.md` 文件既是人类可读的文档，也是机器可解析的知识库。
+
+### 双向流动
+
+- **代码 → 文档**：代码变更自动触发文档更新
+- **文档 → 开发**：AI 在开发过程中主动检索文档，提供上下文
+- **文档 → 决策**：结构化文档支持 AI 分析影响范围、发现不一致
+
+### 人类角色的变化
+
+人类从"文档写作者"转变为"文档审阅者"：
+- AI 负责感知变化、起草更新、标记冲突
+- 人类负责审阅补丁、确认业务语义、合并
+- 这大幅降低了文档维护的心理负担
+
+### 与 SSG 的关系
+
+RunDoc **不是**另一个静态站点生成器。它是文档的知识维护层：
+
+```text
+VitePress / Docusaurus  =  渲染层（UI、导航、搜索、主题）
+RunDoc                  =  维护层（检测、分析、补丁、一致性检查）
+```
+
+两者互补：RunDoc 保证内容准确和新鲜，SSG 负责呈现。RunDoc 生成的补丁是标准 Markdown，可以被任何 SSG 消费。
+
+## Agent 行为与工作场景
+
+### Agent 的核心能力
+
+AI Agent 在 RunDoc 体系中能回答以下问题：
+
+- **知识盘点**：现在有哪些文档？哪些段落和当前任务相关？
+- **变更追踪**：上一次构建后发生了什么变化？上一次扫描提交后发生了什么变化？
+- **引用溯源**：哪篇源文档支撑了这个回答？
+- **影响分析**：代码或产品变化后，哪些文档需要更新？
+- **补丁生成**：现在应该修改哪些具体 Markdown 文件？修改哪些行？
+
+### 典型工作场景
+
+**场景一：代码变更自动同步**
+
+```text
+1. 开发者提交代码，修改了 POST /api/users 的请求体格式
+2. RunDoc Agent 检测到 Git diff 中包含 api-routes.ts 的变更
+3. Agent 分析变更内容：新增了 `phone` 必填字段
+4. Agent 定位相关文档：docs/03-technical/api-routes.md#用户接口
+5. Agent 生成补丁：在请求示例中添加 `phone` 字段
+6. Agent 提交 MR，附带变更说明和源引用
+7. 人类审阅者确认语义正确，合并
+```
+
+**场景二：Issue 驱动的文档补充**
+
+```text
+1. 用户提交 Issue："文档里缺少错误码说明"
+2. RunDoc Agent 扫描现有文档，确认所有包含 API 文档的页面都缺少错误码章节
+3. Agent 从代码中提取错误码定义（HTTP 状态码、业务错误码）
+4. Agent 为每个相关页面生成"错误码"章节的补丁
+5. Agent 提交 MR，标注每个错误码的来源（代码文件:行号）
+```
+
+**场景三：文档一致性检查**
+
+```text
+1. 定时触发（或 Git Hook 触发）
+2. Agent 扫描 docs/ 全部内容，交叉比对：
+   - API 文档中的端点是否与代码中实际的路由一致？
+   - 产品规格中的字段是否与代码中的类型定义一致？
+   - 多个文档中描述同一概念时是否存在矛盾？
+3. Agent 生成一致性检查报告 → .rundoc/reports/consistency-{date}.md
+4. 发现的不一致项自动关联相关文档和代码位置
+```
+
+**场景四：新人入职知识导航**
+
+```text
+1. 新成员加入团队，向 Agent 提问："我是后端开发者，需要了解什么？"
+2. Agent 检索 docs/ 中所有标记 `role: backend` 或位于 `03-technical/` 的内容
+3. Agent 组织回答：
+   - 架构概览：docs/architecture.md
+   - API 规范：docs/03-technical/api-routes.md
+   - 部署流程：docs/06-ops/deployment.md
+4. 每个引用都附带精确的段落级链接
+```
+
+### Agent 的工作边界
+
+- **Agent 做什么**：检测变化、分析影响、定位文档、起草补丁、检查一致性
+- **Agent 不做什么**：不自动合并（需要人类审阅）、不编造不存在的信息、不修改代码文件、不绕过 Git 工作流
+- **关键约束**：所有 Agent 输出必须可追溯、可审阅、可回滚
