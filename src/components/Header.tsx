@@ -101,7 +101,7 @@ export function Header({ onMenuToggle }: HeaderProps) {
         />
         <Link to="/" style={{ display: 'flex', alignItems: 'center', gap: 8, color: '#0a0a0a' }}>
           <img
-            src={`${import.meta.env.BASE_URL}favicon.svg`}
+            src={`${import.meta.env.BASE_URL}logo-200.png`}
             alt=""
             width={28}
             height={28}
