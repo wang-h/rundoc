@@ -41,9 +41,7 @@ function MarkdownCode({ className, children, ...props }: { className?: string; c
 
 function createMarkdownComponents(currentRoute: string) {
   return {
-    h1: ({ children, ...props }: ComponentPropsWithoutRef<'h1'>) => (
-      <Title level={1} style={{ marginTop: 0 }} {...props}>{children}</Title>
-    ),
+    h1: () => null,
     h2: ({ children, ...props }: ComponentPropsWithoutRef<'h2'>) => (
       <Title level={2} style={{ marginTop: 32 }} {...props}>{children}</Title>
     ),
@@ -168,10 +166,11 @@ function extractTitle(markdown: string, fallback: string): string {
   return match ? match[1].trim() : fallback;
 }
 
-function stripLeadingSummary(markdown: string): { summary: string; body: string } {
+function stripLeadingContent(markdown: string): { summary: string; body: string } {
   const lines = markdown.split('\n');
   let cursor = 0;
   while (cursor < lines.length && !lines[cursor].trim()) cursor++;
+  const headerEnd = cursor;
   while (cursor < lines.length && lines[cursor].trim().startsWith('#')) {
     cursor++;
     while (cursor < lines.length && !lines[cursor].trim()) cursor++;
@@ -179,10 +178,10 @@ function stripLeadingSummary(markdown: string): { summary: string; body: string 
   const first = lines[cursor]?.trim() ?? '';
   const looksLikeList = /^(\s*[-*+] |\s*\d+\. )/.test(first);
   if (!first || first.startsWith('#') || first.startsWith('```') || first.startsWith('|') || looksLikeList) {
-    return { summary: '', body: markdown };
+    return { summary: '', body: [...lines.slice(headerEnd)].join('\n') };
   }
   const nextIdx = cursor + 1;
-  const body = [...lines.slice(0, cursor), ...lines.slice(nextIdx)].join('\n');
+  const body = [...lines.slice(headerEnd, cursor), ...lines.slice(nextIdx)].join('\n');
   return { summary: first, body };
 }
 
@@ -194,7 +193,7 @@ export function DocPage({ rawContent = '' }: DocPageProps) {
   const { prev, next } = getPrevNext(navConfig, location.pathname);
   const markdownComponents = useMemo(() => createMarkdownComponents(location.pathname), [location.pathname]);
   const title = useMemo(() => extractTitle(rawContent, t.docPage.untitled), [rawContent, t.docPage.untitled]);
-  const { summary, body } = useMemo(() => stripLeadingSummary(rawContent), [rawContent]);
+  const { summary, body } = useMemo(() => stripLeadingContent(rawContent), [rawContent]);
 
   return (
     <Row gutter={32}>

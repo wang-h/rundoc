@@ -99,7 +99,7 @@ export function Header({ onMenuToggle }: HeaderProps) {
           className="header-mobile-menu-btn"
           onClick={onMenuToggle}
         />
-        <Link to="/" style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+        <Link to="/" style={{ display: 'flex', alignItems: 'center', gap: 8, color: '#0a0a0a' }}>
           <img
             src={`${import.meta.env.BASE_URL}favicon.svg`}
             alt=""
@@ -142,16 +142,17 @@ export function Header({ onMenuToggle }: HeaderProps) {
           }}
           onFocus={() => query.trim().length >= 2 && setSearchOpen(true)}
           style={{ width: 260 }}
+          className="header-desktop-search"
           allowClear
         />
       </Dropdown>
 
       <Space size="middle">
         <LanguageSwitch />
-        <Link to="/docs/ai/api-contract">
-          <Text>{t.header.changelogLink}</Text>
+        <Link to="/docs/ai/api-contract" style={{ color: '#525252' }}>
+          {t.header.changelogLink}
         </Link>
-        <a href="https://github.com/wang-h/rundoc" target="_blank" rel="noopener noreferrer">
+        <a href="https://github.com/wang-h/rundoc" target="_blank" rel="noopener noreferrer" style={{ color: '#525252' }}>
           <GithubOutlined style={{ fontSize: 18 }} />
         </a>
       </Space>

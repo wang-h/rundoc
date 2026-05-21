@@ -1,5 +1,5 @@
 import { useLocation, useNavigate } from 'react-router-dom';
-import { Layout, Menu } from 'antd';
+import { Layout, Menu, Drawer } from 'antd';
 import {
   CompassOutlined,
   EyeOutlined,
@@ -45,44 +45,72 @@ function buildMenuItems(navConfig: NavSection[]) {
   }));
 }
 
+function SidebarMenu({ navConfig, onSelect }: { navConfig: NavSection[]; onSelect: (key: string) => void }) {
+  const location = useLocation();
+  return (
+    <Menu
+      mode="inline"
+      selectedKeys={[location.pathname]}
+      defaultOpenKeys={navConfig.map((s) => `section-${s.title}`)}
+      items={buildMenuItems(navConfig)}
+      onClick={({ key }) => {
+        if (key.startsWith('/docs/')) {
+          onSelect(key);
+        }
+      }}
+      style={{ borderRight: 0, height: '100%' }}
+    />
+  );
+}
+
 export function Sidebar({ collapsed, onCollapse }: SidebarProps) {
   const { t } = useLocale();
   const navConfig = buildNavConfig(t);
-  const location = useLocation();
   const navigate = useNavigate();
 
+  const handleSelect = (key: string) => {
+    navigate(key);
+    onCollapse(true);
+  };
+
   return (
-    <Sider
-      collapsible
-      collapsed={collapsed}
-      onCollapse={onCollapse}
-      breakpoint="lg"
-      collapsedWidth={0}
-      trigger={null}
-      width={260}
-      style={{
-        background: '#fff',
-        borderRight: '1px solid #f0f0f0',
-        overflow: 'auto',
-        height: 'calc(100vh - 56px)',
-        position: 'sticky',
-        top: 56,
-        left: 0,
-      }}
-    >
-      <Menu
-        mode="inline"
-        selectedKeys={[location.pathname]}
-        defaultOpenKeys={navConfig.map((s) => `section-${s.title}`)}
-        items={buildMenuItems(navConfig)}
-        onClick={({ key }) => {
-          if (key.startsWith('/docs/')) {
-            navigate(key);
-            onCollapse(true);
-          }
+    <>
+      {/* Desktop: fixed Sider, always visible */}
+      <Sider
+        width={260}
+        trigger={null}
+        breakpoint="lg"
+        collapsedWidth={0}
+        style={{
+          background: '#fff',
+          borderRight: '1px solid #f0f0f0',
+          overflow: 'auto',
+          height: 'calc(100vh - 56px)',
+          position: 'sticky',
+          top: 56,
+          left: 0,
         }}
-        style={{ borderRight: 0, height: '100%' }}
-      />
-    </Sider>
+        className="sidebar-desktop"
+      >
+        <SidebarMenu navConfig={navConfig} onSelect={handleSelect} />
+      </Sider>
+
+      {/* Mobile: Drawer overlay */}
+      <Drawer
+        placement="left"
+        open={!collapsed}
+        onClose={() => onCollapse(true)}
+        width={280}
+        title={null}
+        closable={false}
+        styles={{
+          body: { padding: 0 },
+          header: { display: 'none' },
+        }}
+        className="sidebar-mobile"
+      >
+        <SidebarMenu navConfig={navConfig} onSelect={handleSelect} />
+      </Drawer>
+    </>
   );
 }

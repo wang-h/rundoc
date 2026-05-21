@@ -35,9 +35,24 @@ body {
   background: #d4d4d4;
 }
 
-/* Mobile menu button: only show on small screens */
+/* Responsive sidebar */
+@media (min-width: 993px) {
+  .sidebar-mobile {
+    display: none !important;
+  }
+}
+
 @media (max-width: 992px) {
+  .sidebar-desktop {
+    display: none !important;
+  }
   .header-mobile-menu-btn {
     display: inline-block !important;
+  }
+  .header-desktop-search {
+    display: none !important;
+  }
+  .home-page-nav-desktop {
+    display: none !important;
   }
 }

@@ -83,7 +83,7 @@ export function HomePage() {
           lineHeight: '56px',
         }}
       >
-        <Link to="/" style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+        <Link to="/" style={{ display: 'flex', alignItems: 'center', gap: 8, color: '#0a0a0a' }}>
           <img
             src={`${import.meta.env.BASE_URL}favicon.svg`}
             alt=""
@@ -95,25 +95,25 @@ export function HomePage() {
             {common.brandName} {common.docsSuffix}
           </strong>
         </Link>
-        <Space size="middle">
-          <Link to="/docs/overview"><Text><BookOutlined /> {h.navOverview}</Text></Link>
-          <Link to="/docs/quick-start"><Text><ThunderboltOutlined /> {h.navQuickStart}</Text></Link>
-          <Link to="/docs/ai/api-contract"><Text><CodeOutlined /> {h.navDevelopers}</Text></Link>
-          <a href="https://github.com/wang-h/rundoc" target="_blank" rel="noopener noreferrer">
-            <Text><GithubOutlined /> {h.navSource}</Text>
+        <Space size="middle" className="home-page-nav-desktop">
+          <Link to="/docs/overview" style={{ color: '#525252' }}><BookOutlined /> {h.navOverview}</Link>
+          <Link to="/docs/quick-start" style={{ color: '#525252' }}><ThunderboltOutlined /> {h.navQuickStart}</Link>
+          <Link to="/docs/ai/api-contract" style={{ color: '#525252' }}><CodeOutlined /> {h.navDevelopers}</Link>
+          <a href="https://github.com/wang-h/rundoc" target="_blank" rel="noopener noreferrer" style={{ color: '#525252' }}>
+            <GithubOutlined /> {h.navSource}
           </a>
           <LanguageSwitch />
         </Space>
       </Header>
 
-      <Content style={{ maxWidth: 1200, margin: '0 auto', padding: '64px 32px', width: '100%' }}>
+      <Content style={{ maxWidth: 1200, margin: '0 auto', padding: '64px 24px', width: '100%' }}>
         {/* Hero */}
         <div style={{ textAlign: 'center', marginBottom: 72 }}>
           <Space style={{ marginBottom: 16 }}>
             <StarOutlined />
             <Text type="secondary">{h.heroEyebrow}</Text>
           </Space>
-          <Title level={1} style={{ fontSize: 40, lineHeight: 1.3, marginBottom: 20 }}>
+          <Title level={1} style={{ fontSize: 36, lineHeight: 1.3, marginBottom: 20 }}>
             {h.heroTitle}
           </Title>
           <Paragraph
@@ -121,7 +121,7 @@ export function HomePage() {
           >
             {h.heroLead}
           </Paragraph>
-          <Space size="middle">
+          <Space size="middle" wrap>
             <Link to="/docs/quick-start">
               <Button type="primary" size="large" icon={<RocketOutlined />}>
                 {h.actionPrimary}
@@ -137,8 +137,8 @@ export function HomePage() {
 
         <Divider style={{ margin: '0 0 64px' }} />
 
-        {/* Panels: Capabilities + Audiences */}
-        <Row gutter={[32, 32]} style={{ marginBottom: 64 }}>
+        {/* Panels */}
+        <Row gutter={[24, 24]} style={{ marginBottom: 64 }}>
           <Col xs={24} lg={12}>
             <Card
               title={
@@ -148,6 +148,7 @@ export function HomePage() {
                 </Space>
               }
               style={{ height: '100%' }}
+              styles={{ body: { padding: '16px 24px' } }}
             >
               <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
                 {homeCapabilities.map((item, i) => (
@@ -180,10 +181,11 @@ export function HomePage() {
                 </Space>
               }
               style={{ height: '100%' }}
+              styles={{ body: { padding: '16px 24px' } }}
             >
               <Space direction="vertical" style={{ width: '100%' }} size="middle">
                 {homeAudiences.map((item) => (
-                  <Link key={item.path} to={item.path}>
+                  <Link key={item.path} to={item.path} style={{ color: 'inherit' }}>
                     <Card
                       hoverable
                       size="small"
@@ -193,7 +195,7 @@ export function HomePage() {
                         <div style={{ color: '#0a0a0a', minWidth: 32, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                           {audiencePathIcon[item.path] ?? <FileTextOutlined style={{ fontSize: 24 }} />}
                         </div>
-                        <div style={{ flex: 1 }}>
+                        <div style={{ flex: 1, minWidth: 0 }}>
                           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                             <strong>{item.title}</strong>
                             <ArrowUpOutlined style={{ color: '#bfbfbf' }} />
@@ -228,7 +230,7 @@ export function HomePage() {
               <Row gutter={[16, 16]}>
                 {section.items.map((item) => (
                   <Col key={item.path} xs={12} sm={8} md={6}>
-                    <Link to={item.path}>
+                    <Link to={item.path} style={{ color: 'inherit' }}>
                       <Card hoverable size="small" style={{ textAlign: 'center' }}>
                         <div style={{ fontWeight: 500 }}>{item.title}</div>
                         <Text type="secondary" style={{ fontSize: 12 }}>{item.label}</Text>

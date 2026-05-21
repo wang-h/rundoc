@@ -11,18 +11,18 @@ interface DocLayoutProps {
 }
 
 export function DocLayout({ children }: DocLayoutProps) {
-  const [collapsed, setCollapsed] = useState(true);
+  const [siderOpen, setSiderOpen] = useState(false);
   const location = useLocation();
 
   useEffect(() => {
-    setCollapsed(true);
+    setSiderOpen(false);
   }, [location.pathname]);
 
   return (
     <Layout style={{ minHeight: '100vh' }}>
-      <Header onMenuToggle={() => setCollapsed((v) => !v)} />
+      <Header onMenuToggle={() => setSiderOpen((v) => !v)} />
       <Layout>
-        <Sidebar collapsed={collapsed} onCollapse={setCollapsed} />
+        <Sidebar collapsed={!siderOpen} onCollapse={(c) => setSiderOpen(!c)} />
         <Layout style={{ padding: '24px 32px 72px', background: '#fff' }}>
           <Content style={{ maxWidth: 1200, margin: '0 auto', width: '100%' }}>
             {children}
