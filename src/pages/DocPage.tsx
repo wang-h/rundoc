@@ -1,6 +1,6 @@
 import { useMemo, type ComponentPropsWithoutRef, type ReactNode } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Typography, Breadcrumb, Space, Button, Row, Col, Divider } from 'antd';
+import { Typography, Breadcrumb, Button, Row, Col, Divider } from 'antd';
 import {
   LeftOutlined,
   RightOutlined,
@@ -51,7 +51,7 @@ function createMarkdownComponents(currentRoute: string) {
       <Title level={3} {...props}>{children}</Title>
     ),
     p: ({ children, ...props }: ComponentPropsWithoutRef<'p'>) => (
-      <Paragraph style={{ lineHeight: 1.75 }} {...props}>{children}</Paragraph>
+      <Paragraph style={{ lineHeight: 1.75, marginBottom: 16 }} {...props}>{children}</Paragraph>
     ),
     pre: ({ children, ...props }: ComponentPropsWithoutRef<'pre'>) => (
       <pre
@@ -200,7 +200,6 @@ export function DocPage({ rawContent = '' }: DocPageProps) {
     <Row gutter={32}>
       <Col xs={24} lg={18}>
         <article>
-          {/* Breadcrumb */}
           <Breadcrumb
             items={[
               { title: <Link to="/">{t.common.brandName}</Link> },
@@ -210,7 +209,6 @@ export function DocPage({ rawContent = '' }: DocPageProps) {
             style={{ marginBottom: 16 }}
           />
 
-          {/* Meta */}
           <div style={{ marginBottom: 32 }}>
             {navItem && (
               <Text type="secondary" style={{ fontSize: 13, textTransform: 'uppercase', letterSpacing: '0.5px' }}>
@@ -221,9 +219,7 @@ export function DocPage({ rawContent = '' }: DocPageProps) {
               {title}
             </Title>
             {summary && (
-              <Paragraph
-                style={{ fontSize: 16, color: '#595959', lineHeight: 1.75 }}
-              >
+              <Paragraph style={{ fontSize: 16, color: '#595959', lineHeight: 1.75 }}>
                 {summary}
               </Paragraph>
             )}
@@ -231,7 +227,6 @@ export function DocPage({ rawContent = '' }: DocPageProps) {
 
           <Divider style={{ margin: '0 0 32px' }} />
 
-          {/* Prose */}
           <div className="doc-prose">
             <ReactMarkdown
               remarkPlugins={[remarkGfm]}
@@ -242,18 +237,17 @@ export function DocPage({ rawContent = '' }: DocPageProps) {
             </ReactMarkdown>
           </div>
 
-          {/* Pager */}
           {(prev || next) && (
             <>
               <Divider />
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                 {prev ? (
                   <Link to={prev.path}>
-                    <Button type="text" icon={<LeftOutlined />}>
-                      <Space direction="vertical" size={0} style={{ textAlign: 'left' }}>
-                        <Text type="secondary" style={{ fontSize: 12 }}>{t.docPage.pagerPrev}</Text>
+                    <Button type="text" icon={<LeftOutlined />} style={{ textAlign: 'left', height: 'auto', padding: '4px 8px' }}>
+                      <div>
+                        <Text type="secondary" style={{ fontSize: 12, display: 'block' }}>{t.docPage.pagerPrev}</Text>
                         <Text>{prev.title}</Text>
-                      </Space>
+                      </div>
                     </Button>
                   </Link>
                 ) : (
@@ -261,12 +255,11 @@ export function DocPage({ rawContent = '' }: DocPageProps) {
                 )}
                 {next ? (
                   <Link to={next.path}>
-                    <Button type="text">
-                      <Space direction="vertical" size={0} style={{ textAlign: 'right' }}>
-                        <Text type="secondary" style={{ fontSize: 12 }}>{t.docPage.pagerNext}</Text>
+                    <Button type="text" icon={<RightOutlined />} iconPosition="end" style={{ textAlign: 'right', height: 'auto', padding: '4px 8px' }}>
+                      <div>
+                        <Text type="secondary" style={{ fontSize: 12, display: 'block' }}>{t.docPage.pagerNext}</Text>
                         <Text>{next.title}</Text>
-                      </Space>
-                      <RightOutlined />
+                      </div>
                     </Button>
                   </Link>
                 ) : null}

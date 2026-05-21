@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useState, useEffect, type ReactNode } from 'react';
 import { Layout } from 'antd';
 import { useLocation } from 'react-router-dom';
 import { Header } from '@/components/Header';
@@ -7,7 +7,7 @@ import { Sidebar } from '@/components/Sidebar';
 const { Content } = Layout;
 
 interface DocLayoutProps {
-  children: React.ReactNode;
+  children: ReactNode;
 }
 
 export function DocLayout({ children }: DocLayoutProps) {

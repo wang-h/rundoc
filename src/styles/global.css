@@ -34,3 +34,10 @@ body {
 ::selection {
   background: #d4d4d4;
 }
+
+/* Mobile menu button: only show on small screens */
+@media (max-width: 992px) {
+  .header-mobile-menu-btn {
+    display: inline-block !important;
+  }
+}

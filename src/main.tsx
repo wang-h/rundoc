@@ -1,4 +1,4 @@
-import React from 'react';
+import { type ReactNode } from 'react';
 import ReactDOM from 'react-dom/client';
 import { ConfigProvider } from 'antd';
 import zhCN from 'antd/locale/zh_CN';
@@ -8,7 +8,7 @@ import { LocaleProvider, useLocale } from './locales/LocaleContext';
 
 const antLocales = { 'zh-CN': zhCN, 'en-US': enUS } as const;
 
-function AntdProvider({ children }: { children: React.ReactNode }) {
+function AntdProvider({ children }: { children: ReactNode }) {
   const { locale } = useLocale();
   return (
     <ConfigProvider
@@ -28,11 +28,9 @@ function AntdProvider({ children }: { children: React.ReactNode }) {
 }
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
-  <React.StrictMode>
-    <LocaleProvider>
-      <AntdProvider>
-        <App />
-      </AntdProvider>
-    </LocaleProvider>
-  </React.StrictMode>
+  <LocaleProvider>
+    <AntdProvider>
+      <App />
+    </AntdProvider>
+  </LocaleProvider>
 );
