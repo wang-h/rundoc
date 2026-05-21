@@ -13,5 +13,13 @@ export default defineConfig({
   build: {
     outDir: 'dist',
     emptyOutDir: true,
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          'antd': ['antd', '@ant-design/icons'],
+          'markdown': ['react-markdown', 'remark-gfm', 'rehype-slug', 'github-slugger'],
+        },
+      },
+    },
   },
 });

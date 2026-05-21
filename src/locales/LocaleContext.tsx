@@ -4,10 +4,10 @@ import {
   isLocaleSwitchVisible,
   messages,
   readInitialLocale,
-  type Locale,
-  type Messages,
   writeLocale,
 } from './i18n';
+export type { Locale } from './i18n';
+import type { Locale, Messages } from './i18n';
 
 interface LocaleContextValue {
   locale: Locale;

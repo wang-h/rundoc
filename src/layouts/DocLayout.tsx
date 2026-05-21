@@ -1,28 +1,34 @@
 import React, { useEffect, useState } from 'react';
+import { Layout } from 'antd';
 import { useLocation } from 'react-router-dom';
-import { Sidebar } from '@/components/Sidebar';
 import { Header } from '@/components/Header';
-import './DocLayout.css';
+import { Sidebar } from '@/components/Sidebar';
+
+const { Content } = Layout;
 
 interface DocLayoutProps {
   children: React.ReactNode;
 }
 
 export function DocLayout({ children }: DocLayoutProps) {
-  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [collapsed, setCollapsed] = useState(true);
   const location = useLocation();
 
   useEffect(() => {
-    setSidebarOpen(false);
+    setCollapsed(true);
   }, [location.pathname]);
 
   return (
-    <div className="doc-layout">
-      <Header onMenuToggle={() => setSidebarOpen((v) => !v)} />
-      <div className="doc-layout__frame">
-        <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
-        <main className="doc-layout__content">{children}</main>
-      </div>
-    </div>
+    <Layout style={{ minHeight: '100vh' }}>
+      <Header onMenuToggle={() => setCollapsed((v) => !v)} />
+      <Layout>
+        <Sidebar collapsed={collapsed} onCollapse={setCollapsed} />
+        <Layout style={{ padding: '24px 32px 72px', background: '#fff' }}>
+          <Content style={{ maxWidth: 1200, margin: '0 auto', width: '100%' }}>
+            {children}
+          </Content>
+        </Layout>
+      </Layout>
+    </Layout>
   );
 }

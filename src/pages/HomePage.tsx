@@ -1,173 +1,245 @@
 import { Link } from 'react-router-dom';
-import { ArrowUpRight, FileText } from 'lucide-react';
+import {
+  Layout,
+  Typography,
+  Button,
+  Card,
+  Space,
+  Row,
+  Col,
+  Divider,
+} from 'antd';
+import {
+  ArrowUpOutlined,
+  FileTextOutlined,
+  BookOutlined,
+  BulbOutlined,
+  CodeOutlined,
+  CompassOutlined,
+  GithubOutlined,
+  InboxOutlined,
+  DatabaseOutlined,
+  RocketOutlined,
+  SendOutlined,
+  StarOutlined,
+  TagsOutlined,
+  TeamOutlined,
+  ThunderboltOutlined,
+  EyeOutlined,
+  ApartmentOutlined,
+  AppstoreOutlined,
+} from '@ant-design/icons';
 import { LanguageSwitch } from '@/components/LanguageSwitch';
 import { buildNavConfig } from '@/utils/nav-config';
 import { useLocale } from '@/locales/LocaleContext';
-import {
-  audiencePathIcon,
-  capabilityIcons,
-  homeCtaIcons,
-  homePanelIcons,
-  homeTopNavIcons,
-  sectionTitleIcon,
-} from './home-page-icons';
-import './HomePage.css';
 
-const lucideSm = { className: 'home-page__lucide home-page__lucide--sm', size: 14, strokeWidth: 1.75 } as const;
-const lucideMd = { className: 'home-page__lucide home-page__lucide--md', size: 18, strokeWidth: 1.75 } as const;
-const lucideLg = { className: 'home-page__lucide home-page__lucide--lg', size: 20, strokeWidth: 1.75 } as const;
-const lucideNav = { className: 'home-page__lucide', size: 16, strokeWidth: 1.75 } as const;
-const lucideCta = { className: 'home-page__lucide', size: 16, strokeWidth: 1.75 } as const;
+const { Header, Content } = Layout;
+const { Title, Paragraph, Text } = Typography;
 
-const {
-  overview: NavOverviewIcon,
-  quickStart: NavQuickIcon,
-  developers: NavDevIcon,
-  source: NavSourceIcon,
-} = homeTopNavIcons;
-const { primary: CtaPrimaryIcon, secondary: CtaSecondaryIcon } = homeCtaIcons;
-const { capabilities: PanelCapIcon, audiences: PanelAudIcon } = homePanelIcons;
+const sectionTitleIcon: Record<string, React.ReactNode> = {
+  '开始': <CompassOutlined />,
+  'Start': <CompassOutlined />,
+  '项目观察': <EyeOutlined />,
+  'Project Watch': <EyeOutlined />,
+  '使用指南': <BookOutlined />,
+  'Guides': <BookOutlined />,
+  'AI 原生': <BulbOutlined />,
+  'AI-native': <BulbOutlined />,
+  '参考': <DatabaseOutlined />,
+  'Reference': <DatabaseOutlined />,
+};
+
+const audiencePathIcon: Record<string, React.ReactNode> = {
+  '/docs/guide/writing-docs': <ApartmentOutlined style={{ fontSize: 24 }} />,
+  '/docs/architecture': <CodeOutlined style={{ fontSize: 24 }} />,
+  '/docs/ai/api-contract': <BulbOutlined style={{ fontSize: 24 }} />,
+  '/docs/overview': <CompassOutlined style={{ fontSize: 24 }} />,
+};
+
+const capabilityIcons: React.ReactNode[] = [
+  <InboxOutlined key="inbox" />,
+  <EyeOutlined key="eye" />,
+  <TagsOutlined key="tags" />,
+  <ArrowUpOutlined key="trending" />,
+  <SendOutlined key="send" />,
+];
 
 export function HomePage() {
   const { t } = useLocale();
   const navConfig = buildNavConfig(t);
   const { home: h, homeAudiences, homeCapabilities, common } = t;
-  const EyebrowIcon = PanelCapIcon;
 
   return (
-    <div className="home-page">
-      <header className="home-page__topbar">
-        <div className="home-page__topbar-row">
-          <Link to="/" className="home-page__brand">
-            <img
-              className="home-page__brand-logo"
-              src={`${import.meta.env.BASE_URL}favicon.svg`}
-              alt=""
-              width={28}
-              height={28}
-              decoding="async"
-              draggable={false}
-            />
-            <span className="home-page__brand-copy">
-              {common.brandName} {common.docsSuffix}
-            </span>
-          </Link>
-          <div className="home-page__topbar-actions">
-            <nav className="home-page__topnav" aria-label="主导航">
-              <Link to="/docs/overview">
-                <NavOverviewIcon aria-hidden {...lucideNav} />
-                {h.navOverview}
-              </Link>
-              <Link to="/docs/quick-start">
-                <NavQuickIcon aria-hidden {...lucideNav} />
-                {h.navQuickStart}
-              </Link>
-              <Link to="/docs/ai/api-contract">
-                <NavDevIcon aria-hidden {...lucideNav} />
-                {h.navDevelopers}
-              </Link>
-              <a href="https://github.com/wang-h/rundoc" target="_blank" rel="noopener noreferrer">
-                <NavSourceIcon aria-hidden {...lucideNav} />
-                {h.navSource}
-              </a>
-            </nav>
-            <LanguageSwitch className="home-page__language-switch" />
-          </div>
+    <Layout style={{ minHeight: '100vh', background: '#fff' }}>
+      <Header
+        style={{
+          background: '#fff',
+          borderBottom: '1px solid #f0f0f0',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          padding: '0 32px',
+          height: 56,
+          lineHeight: '56px',
+        }}
+      >
+        <Link to="/" style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+          <img
+            src={`${import.meta.env.BASE_URL}favicon.svg`}
+            alt=""
+            width={28}
+            height={28}
+            draggable={false}
+          />
+          <strong style={{ fontSize: 16 }}>
+            {common.brandName} {common.docsSuffix}
+          </strong>
+        </Link>
+        <Space size="middle">
+          <Link to="/docs/overview"><Text><BookOutlined /> {h.navOverview}</Text></Link>
+          <Link to="/docs/quick-start"><Text><ThunderboltOutlined /> {h.navQuickStart}</Text></Link>
+          <Link to="/docs/ai/api-contract"><Text><CodeOutlined /> {h.navDevelopers}</Text></Link>
+          <a href="https://github.com/wang-h/rundoc" target="_blank" rel="noopener noreferrer">
+            <Text><GithubOutlined /> {h.navSource}</Text>
+          </a>
+          <LanguageSwitch />
+        </Space>
+      </Header>
+
+      <Content style={{ maxWidth: 1200, margin: '0 auto', padding: '64px 32px', width: '100%' }}>
+        {/* Hero */}
+        <div style={{ textAlign: 'center', marginBottom: 72 }}>
+          <Space style={{ marginBottom: 16 }}>
+            <StarOutlined />
+            <Text type="secondary">{h.heroEyebrow}</Text>
+          </Space>
+          <Title level={1} style={{ fontSize: 40, lineHeight: 1.3, marginBottom: 20 }}>
+            {h.heroTitle}
+          </Title>
+          <Paragraph
+            style={{ fontSize: 16, color: '#595959', maxWidth: 720, margin: '0 auto 32px' }}
+          >
+            {h.heroLead}
+          </Paragraph>
+          <Space size="middle">
+            <Link to="/docs/quick-start">
+              <Button type="primary" size="large" icon={<RocketOutlined />}>
+                {h.actionPrimary}
+              </Button>
+            </Link>
+            <Link to="/docs/overview">
+              <Button size="large" icon={<BookOutlined />}>
+                {h.actionSecondary}
+              </Button>
+            </Link>
+          </Space>
         </div>
-      </header>
 
-      <main className="home-page__body">
-        <section className="home-page__hero">
-          <p className="home-page__eyebrow">
-            <EyebrowIcon aria-hidden {...lucideSm} />
-            {h.heroEyebrow}
-          </p>
-          <h1 className="home-page__title">{h.heroTitle}</h1>
-          <p className="home-page__lead">{h.heroLead}</p>
-          <div className="home-page__actions">
-            <Link to="/docs/quick-start" className="home-page__action home-page__action--primary">
-              <CtaPrimaryIcon aria-hidden {...lucideCta} />
-              {h.actionPrimary}
-            </Link>
-            <Link to="/docs/overview" className="home-page__action">
-              <CtaSecondaryIcon aria-hidden {...lucideCta} />
-              {h.actionSecondary}
-            </Link>
-          </div>
-        </section>
+        <Divider style={{ margin: '0 0 64px' }} />
 
-        <section className="home-page__grid">
-          <div className="home-page__panel">
-            <p className="home-page__panel-title">
-              <PanelCapIcon aria-hidden {...lucideMd} />
-              {h.panelCapabilities}
-            </p>
-            <ul className="home-page__cap-list">
-              {homeCapabilities.map((item, i) => {
-                const CapIcon = capabilityIcons[i] ?? FileText;
-                return (
-                  <li key={item} className="home-page__cap-item">
-                    <span className="home-page__cap-icon" aria-hidden>
-                      <CapIcon {...lucideSm} />
+        {/* Panels: Capabilities + Audiences */}
+        <Row gutter={[32, 32]} style={{ marginBottom: 64 }}>
+          <Col xs={24} lg={12}>
+            <Card
+              title={
+                <Space>
+                  <AppstoreOutlined />
+                  <span>{h.panelCapabilities}</span>
+                </Space>
+              }
+              style={{ height: '100%' }}
+            >
+              <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
+                {homeCapabilities.map((item, i) => (
+                  <li
+                    key={i}
+                    style={{
+                      display: 'flex',
+                      alignItems: 'flex-start',
+                      gap: 10,
+                      padding: '8px 0',
+                      borderBottom: i < homeCapabilities.length - 1 ? '1px solid #f5f5f5' : 'none',
+                    }}
+                  >
+                    <span style={{ color: '#8c8c8c', marginTop: 2 }}>
+                      {capabilityIcons[i] ?? <FileTextOutlined />}
                     </span>
                     <span>{item}</span>
                   </li>
-                );
-              })}
-            </ul>
-          </div>
+                ))}
+              </ul>
+            </Card>
+          </Col>
 
-          <div className="home-page__panel">
-            <p className="home-page__panel-title">
-              <PanelAudIcon aria-hidden {...lucideMd} />
-              {h.panelStart}
-            </p>
-            <div className="home-page__link-list">
-              {homeAudiences.map((item) => {
-                const CardIcon = audiencePathIcon[item.path] ?? FileText;
-                return (
-                  <Link key={item.path} to={item.path} className="home-page__link-card">
-                    <span className="home-page__link-card-pict" aria-hidden>
-                      <CardIcon {...lucideLg} />
-                    </span>
-                    <div className="home-page__link-card-body">
-                      <strong>{item.title}</strong>
-                      <p>{item.description}</p>
-                    </div>
-                    <ArrowUpRight className="home-page__link-card-arrow" aria-hidden size={18} strokeWidth={1.75} />
+          <Col xs={24} lg={12}>
+            <Card
+              title={
+                <Space>
+                  <TeamOutlined />
+                  <span>{h.panelStart}</span>
+                </Space>
+              }
+              style={{ height: '100%' }}
+            >
+              <Space direction="vertical" style={{ width: '100%' }} size="middle">
+                {homeAudiences.map((item) => (
+                  <Link key={item.path} to={item.path}>
+                    <Card
+                      hoverable
+                      size="small"
+                      style={{ border: '1px solid #f0f0f0' }}
+                    >
+                      <div style={{ display: 'flex', gap: 12 }}>
+                        <div style={{ color: '#0a0a0a', minWidth: 32, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                          {audiencePathIcon[item.path] ?? <FileTextOutlined style={{ fontSize: 24 }} />}
+                        </div>
+                        <div style={{ flex: 1 }}>
+                          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                            <strong>{item.title}</strong>
+                            <ArrowUpOutlined style={{ color: '#bfbfbf' }} />
+                          </div>
+                          <Paragraph
+                            style={{ margin: '4px 0 0', color: '#8c8c8c', fontSize: 13, lineHeight: 1.5 }}
+                            ellipsis={{ rows: 2 }}
+                          >
+                            {item.description}
+                          </Paragraph>
+                        </div>
+                      </div>
+                    </Card>
                   </Link>
-                );
-              })}
-            </div>
-          </div>
-        </section>
+                ))}
+              </Space>
+            </Card>
+          </Col>
+        </Row>
 
-        <section className="home-page__sections">
-          {navConfig
-            .filter((section) => section.title !== h.excludeNavSection)
-            .map((section) => {
-              const SectionIcon = sectionTitleIcon[section.title] ?? FileText;
-              return (
-                <section key={section.title} className="home-page__section-block">
-                  <div className="home-page__section-head">
-                    <span className="home-page__section-kicker-icon" aria-hidden>
-                      <SectionIcon {...lucideMd} />
-                    </span>
-                    <p className="home-page__section-kicker">{section.title}</p>
-                  </div>
-                  <div className="home-page__section-links">
-                    {section.items.map((item) => (
-                      <Link key={item.path} to={item.path} className="home-page__section-link">
-                        <span>{item.title}</span>
-                        <small>{item.label}</small>
-                      </Link>
-                    ))}
-                  </div>
-                </section>
-              );
-            })}
-        </section>
-      </main>
-    </div>
+        {/* Section blocks */}
+        {navConfig
+          .filter((section) => section.title !== h.excludeNavSection)
+          .map((section) => (
+            <div key={section.title} style={{ marginBottom: 48 }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 16 }}>
+                <span style={{ color: '#8c8c8c' }}>
+                  {sectionTitleIcon[section.title] ?? <FileTextOutlined />}
+                </span>
+                <Title level={4} style={{ margin: 0 }}>{section.title}</Title>
+              </div>
+              <Row gutter={[16, 16]}>
+                {section.items.map((item) => (
+                  <Col key={item.path} xs={12} sm={8} md={6}>
+                    <Link to={item.path}>
+                      <Card hoverable size="small" style={{ textAlign: 'center' }}>
+                        <div style={{ fontWeight: 500 }}>{item.title}</div>
+                        <Text type="secondary" style={{ fontSize: 12 }}>{item.label}</Text>
+                      </Card>
+                    </Link>
+                  </Col>
+                ))}
+              </Row>
+            </div>
+          ))}
+      </Content>
+    </Layout>
   );
 }

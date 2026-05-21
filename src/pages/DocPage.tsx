@@ -1,5 +1,10 @@
 import { useMemo, type ComponentPropsWithoutRef, type ReactNode } from 'react';
 import { Link, useLocation } from 'react-router-dom';
+import { Typography, Breadcrumb, Space, Button, Row, Col, Divider } from 'antd';
+import {
+  LeftOutlined,
+  RightOutlined,
+} from '@ant-design/icons';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import rehypeSlug from 'rehype-slug';
@@ -7,9 +12,9 @@ import { TOC } from '@/components/TOC';
 import { buildNavConfig, findNavItem, getPrevNext } from '@/utils/nav-config';
 import { resolveMarkdownHref } from '@/utils/markdown-links';
 import { useLocale } from '@/locales/LocaleContext';
-import './DocPage.css';
 
-/** 行内/块内 code 区分：块级一般带 `language-` class；无 class 视为行内 */
+const { Title, Paragraph, Text } = Typography;
+
 function MarkdownCode({ className, children, ...props }: { className?: string; children?: ReactNode }) {
   if (className) {
     return (
@@ -19,7 +24,16 @@ function MarkdownCode({ className, children, ...props }: { className?: string; c
     );
   }
   return (
-    <code className="doc-page__inline-code" {...props}>
+    <code
+      style={{
+        background: '#f5f5f5',
+        padding: '2px 6px',
+        borderRadius: 4,
+        fontSize: '0.9em',
+        fontFamily: "'JetBrains Mono', ui-monospace, monospace",
+      }}
+      {...props}
+    >
       {children}
     </code>
   );
@@ -27,11 +41,31 @@ function MarkdownCode({ className, children, ...props }: { className?: string; c
 
 function createMarkdownComponents(currentRoute: string) {
   return {
-    h1: ({ children, ...props }: ComponentPropsWithoutRef<'h1'>) => <h1 {...props}>{children}</h1>,
-    h2: ({ children, ...props }: ComponentPropsWithoutRef<'h2'>) => <h2 {...props}>{children}</h2>,
-    h3: ({ children, ...props }: ComponentPropsWithoutRef<'h3'>) => <h3 {...props}>{children}</h3>,
+    h1: ({ children, ...props }: ComponentPropsWithoutRef<'h1'>) => (
+      <Title level={1} style={{ marginTop: 0 }} {...props}>{children}</Title>
+    ),
+    h2: ({ children, ...props }: ComponentPropsWithoutRef<'h2'>) => (
+      <Title level={2} style={{ marginTop: 32 }} {...props}>{children}</Title>
+    ),
+    h3: ({ children, ...props }: ComponentPropsWithoutRef<'h3'>) => (
+      <Title level={3} {...props}>{children}</Title>
+    ),
+    p: ({ children, ...props }: ComponentPropsWithoutRef<'p'>) => (
+      <Paragraph style={{ lineHeight: 1.75 }} {...props}>{children}</Paragraph>
+    ),
     pre: ({ children, ...props }: ComponentPropsWithoutRef<'pre'>) => (
-      <pre className="doc-page__code-block" {...props}>
+      <pre
+        style={{
+          background: '#f5f5f5',
+          padding: 16,
+          borderRadius: 6,
+          overflowX: 'auto',
+          fontSize: 14,
+          lineHeight: 1.6,
+          fontFamily: "'JetBrains Mono', ui-monospace, monospace",
+        }}
+        {...props}
+      >
         {children}
       </pre>
     ),
@@ -40,9 +74,7 @@ function createMarkdownComponents(currentRoute: string) {
       const resolved = resolveMarkdownHref(href, currentRoute);
       if (resolved === '/' || resolved.startsWith('/docs/')) {
         return (
-          <Link to={resolved} {...props}>
-            {children}
-          </Link>
+          <Link to={resolved} {...props}>{children}</Link>
         );
       }
       if (resolved.startsWith('#')) {
@@ -52,9 +84,7 @@ function createMarkdownComponents(currentRoute: string) {
             onClick={(e) => {
               e.preventDefault();
               const el = document.getElementById(resolved.slice(1));
-              if (el) {
-                el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-              }
+              if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
             }}
             {...props}
           >
@@ -73,6 +103,59 @@ function createMarkdownComponents(currentRoute: string) {
         </a>
       );
     },
+    table: ({ children, ...props }: ComponentPropsWithoutRef<'table'>) => (
+      <div style={{ overflowX: 'auto', margin: '16px 0' }}>
+        <table
+          style={{
+            width: '100%',
+            borderCollapse: 'collapse',
+            fontSize: 14,
+          }}
+          {...props}
+        >
+          {children}
+        </table>
+      </div>
+    ),
+    th: ({ children, ...props }: ComponentPropsWithoutRef<'th'>) => (
+      <th
+        style={{
+          border: '1px solid #f0f0f0',
+          padding: '8px 12px',
+          background: '#fafafa',
+          textAlign: 'left',
+          fontWeight: 600,
+        }}
+        {...props}
+      >
+        {children}
+      </th>
+    ),
+    td: ({ children, ...props }: ComponentPropsWithoutRef<'td'>) => (
+      <td style={{ border: '1px solid #f0f0f0', padding: '8px 12px' }} {...props}>
+        {children}
+      </td>
+    ),
+    blockquote: ({ children, ...props }: ComponentPropsWithoutRef<'blockquote'>) => (
+      <blockquote
+        style={{
+          borderLeft: '3px solid #0a0a0a',
+          margin: '16px 0',
+          padding: '8px 16px',
+          color: '#595959',
+          background: '#fafafa',
+        }}
+        {...props}
+      >
+        {children}
+      </blockquote>
+    ),
+    ul: ({ children, ...props }: ComponentPropsWithoutRef<'ul'>) => (
+      <ul style={{ paddingLeft: 20, lineHeight: 1.75 }} {...props}>{children}</ul>
+    ),
+    ol: ({ children, ...props }: ComponentPropsWithoutRef<'ol'>) => (
+      <ol style={{ paddingLeft: 20, lineHeight: 1.75 }} {...props}>{children}</ol>
+    ),
   };
 }
 
@@ -114,53 +197,88 @@ export function DocPage({ rawContent = '' }: DocPageProps) {
   const { summary, body } = useMemo(() => stripLeadingSummary(rawContent), [rawContent]);
 
   return (
-    <article className="doc-page">
-      <div className="doc-page__main">
-        <div className="doc-page__meta">
-          <p className="doc-page__section">{navItem?.section.title || t.docPage.sectionFallback}</p>
-          <h1 className="doc-page__title">{title}</h1>
-          {summary && (
-            <div className="doc-page__summary doc-page__prose">
-              <ReactMarkdown remarkPlugins={[remarkGfm]} components={markdownComponents}>
-                {summary}
-              </ReactMarkdown>
-            </div>
-          )}
-        </div>
+    <Row gutter={32}>
+      <Col xs={24} lg={18}>
+        <article>
+          {/* Breadcrumb */}
+          <Breadcrumb
+            items={[
+              { title: <Link to="/">{t.common.brandName}</Link> },
+              ...(navItem ? [{ title: navItem.section.title }] : []),
+              { title },
+            ]}
+            style={{ marginBottom: 16 }}
+          />
 
-        <div className="doc-page__prose">
-          <ReactMarkdown
-            remarkPlugins={[remarkGfm]}
-            rehypePlugins={[rehypeSlug]}
-            components={markdownComponents}
-          >
-            {body}
-          </ReactMarkdown>
-        </div>
-
-        {(prev || next) && (
-          <nav className="doc-page__pager">
-            {prev ? (
-              <Link to={prev.path} className="doc-page__pager-link">
-                <span className="doc-page__pager-label">{t.docPage.pagerPrev}</span>
-                <strong>{prev.title}</strong>
-              </Link>
-            ) : (
-              <span />
+          {/* Meta */}
+          <div style={{ marginBottom: 32 }}>
+            {navItem && (
+              <Text type="secondary" style={{ fontSize: 13, textTransform: 'uppercase', letterSpacing: '0.5px' }}>
+                {navItem.section.title}
+              </Text>
             )}
-            {next ? (
-              <Link to={next.path} className="doc-page__pager-link doc-page__pager-link--next">
-                <span className="doc-page__pager-label">{t.docPage.pagerNext}</span>
-                <strong>{next.title}</strong>
-              </Link>
-            ) : null}
-          </nav>
-        )}
-      </div>
+            <Title level={1} style={{ marginTop: 4 }}>
+              {title}
+            </Title>
+            {summary && (
+              <Paragraph
+                style={{ fontSize: 16, color: '#595959', lineHeight: 1.75 }}
+              >
+                {summary}
+              </Paragraph>
+            )}
+          </div>
 
-      <div className="doc-page__aside">
+          <Divider style={{ margin: '0 0 32px' }} />
+
+          {/* Prose */}
+          <div className="doc-prose">
+            <ReactMarkdown
+              remarkPlugins={[remarkGfm]}
+              rehypePlugins={[rehypeSlug]}
+              components={markdownComponents}
+            >
+              {body}
+            </ReactMarkdown>
+          </div>
+
+          {/* Pager */}
+          {(prev || next) && (
+            <>
+              <Divider />
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                {prev ? (
+                  <Link to={prev.path}>
+                    <Button type="text" icon={<LeftOutlined />}>
+                      <Space direction="vertical" size={0} style={{ textAlign: 'left' }}>
+                        <Text type="secondary" style={{ fontSize: 12 }}>{t.docPage.pagerPrev}</Text>
+                        <Text>{prev.title}</Text>
+                      </Space>
+                    </Button>
+                  </Link>
+                ) : (
+                  <div />
+                )}
+                {next ? (
+                  <Link to={next.path}>
+                    <Button type="text">
+                      <Space direction="vertical" size={0} style={{ textAlign: 'right' }}>
+                        <Text type="secondary" style={{ fontSize: 12 }}>{t.docPage.pagerNext}</Text>
+                        <Text>{next.title}</Text>
+                      </Space>
+                      <RightOutlined />
+                    </Button>
+                  </Link>
+                ) : null}
+              </div>
+            </>
+          )}
+        </article>
+      </Col>
+
+      <Col xs={0} lg={6}>
         <TOC content={body} />
-      </div>
-    </article>
+      </Col>
+    </Row>
   );
 }

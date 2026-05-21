@@ -1,9 +1,17 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { Layout, Input, Dropdown, Space, Typography } from 'antd';
+import {
+  SearchOutlined,
+  GithubOutlined,
+  MenuOutlined,
+} from '@ant-design/icons';
 import searchIndex from '@/content/search-index.json';
 import { useLocale } from '@/locales/LocaleContext';
 import { LanguageSwitch } from './LanguageSwitch';
-import './Header.css';
+
+const { Header: AntHeader } = Layout;
+const { Text } = Typography;
 
 interface HeaderProps {
   onMenuToggle: () => void;
@@ -18,36 +26,25 @@ interface SearchEntry {
 
 export function Header({ onMenuToggle }: HeaderProps) {
   const { t } = useLocale();
+  const navigate = useNavigate();
   const [query, setQuery] = useState('');
-  const [open, setOpen] = useState(false);
-  const ref = useRef<HTMLDivElement>(null);
+  const [searchOpen, setSearchOpen] = useState(false);
+  const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    const handleClickOutside = (e: MouseEvent) => {
-      if (ref.current && !ref.current.contains(e.target as Node)) {
-        setOpen(false);
-      }
-    };
-
     const handleKeyDown = (e: KeyboardEvent) => {
       if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
         e.preventDefault();
-        setOpen(true);
-        const input = document.querySelector('.header__search-input') as HTMLInputElement | null;
-        input?.focus();
+        setSearchOpen(true);
+        setTimeout(() => inputRef.current?.focus(), 0);
       }
       if (e.key === 'Escape') {
-        setOpen(false);
+        setSearchOpen(false);
         setQuery('');
       }
     };
-
-    document.addEventListener('mousedown', handleClickOutside);
     document.addEventListener('keydown', handleKeyDown);
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-      document.removeEventListener('keydown', handleKeyDown);
-    };
+    return () => document.removeEventListener('keydown', handleKeyDown);
   }, []);
 
   const results = useMemo(() => {
@@ -57,92 +54,107 @@ export function Header({ onMenuToggle }: HeaderProps) {
       .filter((item) => {
         const inTitle = item.title.toLowerCase().includes(lower);
         const inSection = item.section.toLowerCase().includes(lower);
-        const inHeading = item.headings.some((heading) => heading.toLowerCase().includes(lower));
+        const inHeading = item.headings.some((h) => h.toLowerCase().includes(lower));
         return inTitle || inSection || inHeading;
       })
       .slice(0, 8);
   }, [query]);
 
+  const searchDropdownItems = useMemo(() => {
+    if (results.length === 0) {
+      return [{ key: 'empty', label: t.header.searchNoResults, disabled: true }];
+    }
+    return results.map((item) => ({
+      key: item.path,
+      label: (
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <div>
+            <div style={{ fontWeight: 500 }}>{item.title}</div>
+            <Text type="secondary" style={{ fontSize: 12 }}>{item.section}</Text>
+          </div>
+        </div>
+      ),
+    }));
+  }, [results, t.header.searchNoResults]);
+
   return (
-    <header className="header">
-      <div className="header__left">
-        <button className="header__menu-btn" onClick={onMenuToggle} aria-label={t.header.openMenuAria}>
-          <span />
-          <span />
-          <span />
-        </button>
-        <Link to="/" className="header__brand">
+    <AntHeader
+      style={{
+        background: '#fff',
+        borderBottom: '1px solid #f0f0f0',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        padding: '0 24px',
+        position: 'sticky',
+        top: 0,
+        zIndex: 100,
+        height: 56,
+        lineHeight: '56px',
+      }}
+    >
+      <Space size="middle">
+        <MenuOutlined
+          style={{ fontSize: 18, cursor: 'pointer', display: 'none' }}
+          className="header-mobile-menu-btn"
+          onClick={onMenuToggle}
+        />
+        <Link to="/" style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
           <img
-            className="header__brand-logo"
             src={`${import.meta.env.BASE_URL}favicon.svg`}
             alt=""
             width={28}
             height={28}
-            decoding="async"
             draggable={false}
           />
-          <span className="header__brand-text">
+          <strong style={{ fontSize: 16 }}>
             {t.common.brandName} {t.common.docsSuffix}
-          </span>
+          </strong>
         </Link>
-      </div>
+      </Space>
 
-      <div className="header__search-shell" ref={ref}>
-        <div className="header__search">
-          <svg className="header__search-icon" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-            <circle cx="7" cy="7" r="5" stroke="currentColor" strokeWidth="1.5" />
-            <path d="M11 11l3 3" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
-          </svg>
-          <input
-            type="text"
-            className="header__search-input"
-            placeholder={t.header.searchPlaceholder}
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-            onFocus={() => setOpen(true)}
-          />
-          <kbd className="header__search-kbd">⌘K</kbd>
-        </div>
+      <Dropdown
+        menu={{
+          items: searchDropdownItems,
+          onClick: ({ key }) => {
+            if (key !== 'empty') {
+              navigate(key);
+              setSearchOpen(false);
+              setQuery('');
+            }
+          },
+        }}
+        open={searchOpen && query.trim().length >= 2}
+        onOpenChange={(open) => {
+          if (!open) setSearchOpen(false);
+        }}
+        trigger={['click']}
+      >
+        <Input
+          ref={inputRef as any}
+          prefix={<SearchOutlined style={{ color: '#bfbfbf' }} />}
+          suffix={<Text keyboard style={{ fontSize: 11, lineHeight: '18px' }}>⌘K</Text>}
+          placeholder={t.header.searchPlaceholder}
+          value={query}
+          onChange={(e) => {
+            setQuery(e.target.value);
+            if (e.target.value.trim().length >= 2) setSearchOpen(true);
+          }}
+          onFocus={() => query.trim().length >= 2 && setSearchOpen(true)}
+          style={{ width: 260 }}
+          allowClear
+        />
+      </Dropdown>
 
-        {open && query.trim().length >= 2 && (
-          <div className="header__search-dropdown" role="listbox" aria-label={t.header.searchPlaceholder}>
-            {results.length > 0 ? (
-              results.map((item) => (
-                <Link
-                  key={item.path}
-                  to={item.path}
-                  className="header__search-result"
-                  role="option"
-                  onClick={() => {
-                    setOpen(false);
-                    setQuery('');
-                  }}
-                >
-                  <div className="header__search-copy">
-                    <span className="header__search-title">{item.title}</span>
-                    <span className="header__search-meta">{item.section}</span>
-                  </div>
-                  <span className="header__search-arrow">↗</span>
-                </Link>
-              ))
-            ) : (
-              <div className="header__search-empty" role="status">
-                {t.header.searchNoResults}
-              </div>
-            )}
-          </div>
-        )}
-      </div>
-
-      <div className="header__right">
+      <Space size="middle">
         <LanguageSwitch />
-        <Link to="/docs/ai/api-contract" className="header__changelog">
-          {t.header.changelogLink}
+        <Link to="/docs/ai/api-contract">
+          <Text>{t.header.changelogLink}</Text>
         </Link>
-        <a href="https://github.com/wang-h/rundoc" target="_blank" rel="noopener noreferrer" className="header__github">
-          {t.header.sourceLink}
+        <a href="https://github.com/wang-h/rundoc" target="_blank" rel="noopener noreferrer">
+          <GithubOutlined style={{ fontSize: 18 }} />
         </a>
-      </div>
-    </header>
+      </Space>
+    </AntHeader>
   );
 }

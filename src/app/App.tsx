@@ -1,4 +1,3 @@
-import React from 'react';
 import { HashRouter, Routes, Route, useParams } from 'react-router-dom';
 import { DocLayout } from '@/layouts/DocLayout';
 import { HomePage } from '@/pages/HomePage';
@@ -13,7 +12,7 @@ function DocRoute() {
   const { '*': section } = useParams();
   const path = section ? `docs/${section}` : 'docs/overview';
   const missingBody = interpolate(t.app.notFoundBody, { path });
-  const rawContent = docsContent[path] || `# ${t.app.notFoundH1}\n\n${missingBody}`;
+  const rawContent = (docsContent as Record<string, string>)[path] || `# ${t.app.notFoundH1}\n\n${missingBody}`;
   return <DocPage rawContent={rawContent} />;
 }
 

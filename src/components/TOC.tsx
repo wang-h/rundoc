@@ -1,7 +1,9 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo } from 'react';
+import { Anchor, Typography } from 'antd';
 import { slug } from 'github-slugger';
 import { useLocale } from '@/locales/LocaleContext';
-import './TOC.css';
+
+const { Title } = Typography;
 
 interface TocItem {
   id: string;
@@ -20,69 +22,38 @@ function extractHeadings(markdown: string): TocItem[] {
   for (const line of lines) {
     const match = /^(##|###)\s+(.+)$/.exec(line.trim());
     if (!match) continue;
-
     const level = match[1].length;
     const text = match[2].trim();
-    headings.push({
-      id: slug(text),
-      text,
-      level,
-    });
+    headings.push({ id: slug(text), text, level });
   }
 
   return headings;
 }
 
+function buildAnchorItems(headings: TocItem[]) {
+  return headings.map((h) => ({
+    key: h.id,
+    href: `#${h.id}`,
+    title: h.text,
+  }));
+}
+
 export function TOC({ content }: TOCProps) {
   const { t } = useLocale();
   const headings = useMemo(() => extractHeadings(content), [content]);
-  const [activeId, setActiveId] = useState('');
-
-  useEffect(() => {
-    if (!headings.length) return;
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        const visible = entries.filter((entry) => entry.isIntersecting);
-        if (visible.length > 0) {
-          setActiveId(visible[0].target.id);
-        }
-      },
-      { rootMargin: '-96px 0px -72% 0px' }
-    );
-
-    headings.forEach(({ id }) => {
-      const el = document.getElementById(id);
-      if (el) observer.observe(el);
-    });
-
-    return () => observer.disconnect();
-  }, [headings]);
 
   if (!headings.length) return null;
 
   return (
-    <aside className="toc">
-      <p className="toc__eyebrow">{t.toc.eyebrow}</p>
-      <ul className="toc__list">
-        {headings.map((h) => (
-          <li key={h.id} className={`toc__item toc__item--level-${h.level}`}>
-            <a
-              href={`#${h.id}`}
-              className={`toc__link ${activeId === h.id ? 'toc__link--active' : ''}`}
-              onClick={(e) => {
-                e.preventDefault();
-                const el = document.getElementById(h.id);
-                if (el) {
-                  el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                }
-              }}
-            >
-              {h.text}
-            </a>
-          </li>
-        ))}
-      </ul>
-    </aside>
+    <div style={{ position: 'sticky', top: 80 }}>
+      <Title level={5} style={{ marginBottom: 12, color: '#8c8c8c', fontSize: 12, textTransform: 'uppercase', letterSpacing: '0.5px' }}>
+        {t.toc.eyebrow}
+      </Title>
+      <Anchor
+        offsetTop={80}
+        items={buildAnchorItems(headings)}
+        style={{ maxWidth: 200 }}
+      />
+    </div>
   );
 }
