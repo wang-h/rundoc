@@ -349,22 +349,159 @@ npm run build
 
 **解决方法：** 运行 `npm run build` 重新生成文档站，哈希将自动更新。若持续出现，检查是否有其他工具（如编辑器自动格式化）在修改文件。
 
+## 5. 启动后端服务器
+
+RunDoc 提供了完整的后端 API 服务，用于项目管理、文档存储和版本历史：
+
+```bash
+cd server
+npm install
+npm run dev
+```
+
+**预期输出：**
+
+```text
+Running database migrations...
+  ✓ Migration "0001_create_projects" executed successfully
+  ✓ Migration "0002_create_documents" executed successfully
+Migrations complete.
+RunDoc Server running on http://localhost:3191
+```
+
+**关键说明：**
+- 服务默认监听端口 `3191`（可通过 `PORT` 环境变量修改）
+- 启动时自动执行数据库迁移，创建 `rundoc.db` SQLite 数据库文件
+- 数据库路径默认为 `server/rundoc.db`，可通过 `DATABASE_PATH` 环境变量自定义
+- 健康检查：`curl http://localhost:3191/health`
+
+## 6. 通过 API 创建项目与文档
+
+### 创建第一个项目
+
+```bash
+curl -X POST http://localhost:3191/api/projects \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer <your-token>" \
+  -d '{
+    "name": "My Project",
+    "slug_id": "my-project",
+    "description": "A sample project for testing",
+    "git_repo_url": "https://github.com/example/my-project"
+  }'
+```
+
+### 创建文档
+
+```bash
+curl -X POST http://localhost:3191/api/projects/my-project/docs \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer <your-token>" \
+  -d '{
+    "title": "Getting Started",
+    "content": "# Getting Started\n\nWelcome to My Project!\n\n## Installation\n\n```bash\nnpm install\n```"
+  }'
+```
+
+### 查看文档列表
+
+```bash
+curl http://localhost:3191/api/projects/my-project/docs \
+  -H "Authorization: Bearer <your-token>"
+```
+
+### 更新文档（自动保存版本快照）
+
+```bash
+curl -X PUT http://localhost:3191/api/projects/my-project/docs/<doc-id> \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer <your-token>" \
+  -d '{
+    "title": "Getting Started (Updated)",
+    "content": "# Getting Started\n\nUpdated content...",
+    "change_summary": "Updated installation steps"
+  }'
+```
+
+每次更新文档时，系统自动将当前版本保存到 `document_history` 表，形成完整的版本历史。可通过以下接口查看：
+
+```bash
+curl http://localhost:3191/api/projects/my-project/docs/<doc-id>/history \
+  -H "Authorization: Bearer <your-token>"
+```
+
+## 7. 通过 UI 管理项目与文档
+
+除了 API，RunDoc 前端提供了完整的管理界面：
+
+1. **访问首页** → 点击进入 `/projects` 项目列表
+2. **创建项目** → 点击"New Project"按钮，填写项目名称、描述和 Git 仓库地址
+3. **进入项目** → 点击项目卡片，进入项目详情页，查看文档树
+4. **创建文档** → 在项目详情页点击"New Doc"，填写标题和内容
+5. **编辑文档** → 在文档阅读页点击"Edit"，使用 TipTap 3 编辑器进行所见即所得编辑
+6. **查看历史** → 文档页面展示所有历史版本，支持查看变更摘要
+
+## 8. 前端 Mock 模式
+
+前端在无法连接后端时自动降级为 Mock 模式，使用内置的示例数据：
+
+**Mock 数据来源：** `src/utils/mock-data.ts`
+
+**降级逻辑：**
+- 页面加载时尝试调用 `/api/me` 获取用户信息
+- 若后端不可达，API 调用自动回退到 mock 数据
+- Mock 数据包含 4 个示例项目（RunDoc、RunOS API、Editor Markdown、RunOS CLI）和对应的文档及版本历史
+
+**何时使用 Mock 模式：**
+- 前端独立开发，无需启动后端
+- 快速体验和演示 UI 功能
+- 后端部署前的前端功能验证
+
+**启动前端开发服务器：**
+
+```bash
+# 在项目根目录
+npm install
+npm run dev
+```
+
+访问 `http://localhost:3000`，前端将自动检测后端状态并选择数据源。
+
+## 9. 完整开发环境搭建
+
+同时运行前端和后端以获得完整体验：
+
+```bash
+# 终端 1：启动后端
+cd server
+npm install
+npm run dev
+
+# 终端 2：启动前端
+npm install
+npm run dev
+```
+
+前端默认通过 Vite 代理将 `/api` 请求转发到后端，配置见 `vite.config.ts`。
+
 ## 下一步
 
 完成快速开始后，建议按以下顺序深入了解 RunDoc：
 
 | 文档 | 说明 |
 |------|------|
-| [架构设计](/docs/architecture) | 了解引擎的两层设计和处理管线 |
+| [架构设计](/docs/architecture) | 了解引擎的多层设计和处理管线 |
 | [内容模型](/docs/reference/content-model) | 理解数据模型的字段和关系 |
-| [API 约定](/docs/ai/api-contract) | 了解计划中的 API 接口设计 |
+| [API 约定](/docs/ai/api-contract) | 了解 API 接口设计 |
 | [影响映射规则](/docs/03-technical/impact-rules) | 自定义你的项目变更感知规则 |
 | [设计原则](/docs/ai/design-principles) | 了解 RunDoc 的核心设计理念 |
 | [路线图](/docs/reference/roadmap) | 查看未来功能规划 |
 
-**推荐工作流：**
+## 推荐工作流
 
 1. 将 `rundoc scan` 加入 CI 流水线，每次提交自动检测文档影响
 2. 在团队 Code Review 流程中加入"文档同步检查"卡点
 3. 定期运行 `rundoc check` 清理过期引用和死链接
 4. 扩展 `.rundoc/rules/impact-map.yml` 适配项目特有的文件结构
+5. 使用项目维度的文档管理组织团队知识库
+6. 通过文档编辑器和版本历史进行协作编辑

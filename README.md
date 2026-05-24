@@ -8,20 +8,38 @@
 
 <p align="center">
   <a href="https://github.com/wang-h/rundoc"><img src="https://img.shields.io/badge/version-0.1.0-blue?style=for-the-badge" alt="Version" /></a>
-  <a href="https://github.com/wang-h/rundoc"><img src="https://img.shields.io/badge/license-MIT-green?style=for-the-badge" alt="License" /></a>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/license-Proprietary-red?style=for-the-badge" alt="License" /></a>
   <img src="https://img.shields.io/badge/React-18-61dafb?style=for-the-badge&logo=react" alt="React" />
   <img src="https://img.shields.io/badge/Vite-5-646cff?style=for-the-badge&logo=vite" alt="Vite" />
   <img src="https://img.shields.io/badge/TypeScript-5.6-3178c6?style=for-the-badge&logo=typescript" alt="TypeScript" />
   <img src="https://img.shields.io/badge/AI_Native-8b5cf6?style=for-the-badge" alt="AI-Native" />
 </p>
 
-[GitHub Pages](https://wang-h.github.io/rundoc/)
-
 RunDoc 让文档跟随项目一起运行。它读取仓库状态，理解项目变化，将变化映射到正确的 Markdown 文件，并生成可审核的文档更新任务。
 
 ```text
 Detect -> Understand -> Map -> Patch -> Commit
 ```
+
+## RunOS 中的定位
+
+RunDoc 是 RunOS 的正式知识资产引擎，解决“正式知识如何保持新鲜”。
+
+```text
+RunID 解决“谁”
+RunLoop 解决“做什么、怎么推进”
+RunDoc 解决“正式知识如何保持新鲜”
+RunMind 解决“组织如何记住”
+RunAgent 解决“AI 如何成为组织成员”
+```
+
+RunDoc 不记录普通工作汇报，也不替代 RunMind。它承载已经沉淀、可长期引用、需要版本和负责人维护的正式内容，例如产品文档、技术文档、接口说明、SOP、制度、架构说明和决策文档。
+
+腾讯生态相关的稳定规范也属于 RunDoc：企业微信通道 SOP、小程序架构、微信支付流程、腾讯云资源访问规范等，应沉淀为正式知识资产。
+
+详细边界见：
+
+- [RunDoc in RunOS](./docs/00-positioning/runos-document-engine.md)
 
 ## 为什么需要 RunDoc
 
@@ -246,7 +264,7 @@ source_hash
 
 ## License
 
-[MIT](LICENSE)
+[Proprietary](LICENSE). This project is proprietary and confidential to Shanghai RUZHI Information Technology Co., Ltd.
 
 ---
 
@@ -260,7 +278,7 @@ source_hash
 
 <p align="center">
   <a href="https://github.com/wang-h/rundoc"><img src="https://img.shields.io/badge/version-0.1.0-blue?style=for-the-badge" alt="Version" /></a>
-  <a href="https://github.com/wang-h/rundoc"><img src="https://img.shields.io/badge/license-MIT-green?style=for-the-badge" alt="License" /></a>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/license-Proprietary-red?style=for-the-badge" alt="License" /></a>
   <img src="https://img.shields.io/badge/React-18-61dafb?style=for-the-badge&logo=react" alt="React" />
   <img src="https://img.shields.io/badge/Vite-5-646cff?style=for-the-badge&logo=vite" alt="Vite" />
   <img src="https://img.shields.io/badge/TypeScript-5.6-3178c6?style=for-the-badge&logo=typescript" alt="TypeScript" />
@@ -496,4 +514,4 @@ Next:
 
 ## License
 
-[MIT](LICENSE)
+[Proprietary](LICENSE). This project is proprietary and confidential to Shanghai RUZHI Information Technology Co., Ltd.

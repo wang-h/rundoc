@@ -4,7 +4,82 @@ title: 内容模型
 
 # 内容模型
 
-RunDoc 的数据模型分三层：项目变更、文档目标、补丁产物。
+RunDoc 的数据模型涵盖两大领域：**后端持久化实体**（Project、Document、DocumentHistory）与**变更分析链路**（变更事件、影响映射、文档补丁、生成报告）。
+
+---
+
+## 后端持久化实体
+
+### Project（项目）
+
+文档项目的顶层组织单元。每个项目包含多个文档，支持软删除。
+
+```text
+id              # UUID      — 主键
+slug_id         # string    — URL 友好标识，由 name 自动生成
+name            # string    — 项目名称（必填）
+description     # string?   — 项目描述
+git_repo_url    # string?   — 关联 Git 仓库地址
+workspace_id    # UUID?     — 所属工作空间
+org_id          # UUID?     — 所属组织
+created_by      # UUID?     — 创建者用户 ID
+status          # string    — active | archived
+created_at      # string    — ISO 8601
+updated_at      # string    — ISO 8601
+```
+
+### Document（文档）
+
+项目下的 Markdown 文档节点。通过 `parent_doc_id` 支持树形层级，通过 `position` 分数索引排序。
+
+```text
+id              # UUID      — 主键
+slug_id         # string?   — URL 友好标识
+title           # string    — 文档标题（必填）
+content         # text      — Markdown 正文
+project_id      # UUID      — FK → projects.id
+parent_doc_id   # UUID?     — 自引用 FK → documents.id
+position        # string    — 分数索引（如 'a0'）
+status          # string    — draft | published | archived
+last_updated_by # UUID?     — 最近更新者
+created_at      # string    — ISO 8601
+updated_at      # string    — ISO 8601
+deleted_at      # string?   — 软删除时间戳
+```
+
+### DocumentHistory（文档历史）
+
+每次文档更新自动生成的历史快照，记录完整的 `title` 和 `content`。
+
+```text
+id              # UUID      — 主键
+document_id     # UUID      — FK → documents.id
+title           # string    — 快照标题
+content         # text      — 快照正文
+changed_by      # UUID?     — 变更者
+change_summary  # string?   — 变更摘要
+created_at      # string    — ISO 8601
+```
+
+### 实体关系
+
+```text
+┌──────────┐      1:N       ┌──────────┐      1:N       ┌──────────────────┐
+│  Project │ ────────────→ │ Document │ ────────────→ │ DocumentHistory   │
+└──────────┘                └─────┬────┘                └──────────────────┘
+                                  │
+                                  │ parent_doc_id (自引用)
+                                  ▼
+                            ┌──────────┐
+                            │ Document │  (子文档)
+                            └──────────┘
+```
+
+---
+
+## 变更分析链路
+
+RunDoc 的变更分析模型分三层：项目变更、文档目标、补丁产物。
 
 ## 1) 变更事件
 

@@ -10,6 +10,14 @@ export default defineConfig({
       '@': path.resolve(__dirname, './src'),
     },
   },
+  server: {
+    port: 5174,
+    proxy: {
+      '/auth': 'http://localhost:3191',
+      '/api': 'http://localhost:3191',
+      '/health': 'http://localhost:3191',
+    },
+  },
   build: {
     outDir: 'dist',
     emptyOutDir: true,

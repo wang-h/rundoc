@@ -1,9 +1,10 @@
 import { useMemo, type ComponentPropsWithoutRef, type ReactNode } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Typography, Breadcrumb, Button, Row, Col, Divider } from 'antd';
 import {
   LeftOutlined,
   RightOutlined,
+  EditOutlined,
 } from '@ant-design/icons';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
@@ -159,6 +160,8 @@ function createMarkdownComponents(currentRoute: string) {
 
 interface DocPageProps {
   rawContent?: string;
+  /** When provided, shows an Edit button that navigates to this path */
+  editPath?: string;
 }
 
 function extractTitle(markdown: string, fallback: string): string {
@@ -185,9 +188,10 @@ function stripLeadingContent(markdown: string): { summary: string; body: string 
   return { summary: first, body };
 }
 
-export function DocPage({ rawContent = '' }: DocPageProps) {
+export function DocPage({ rawContent = '', editPath }: DocPageProps) {
   const { t } = useLocale();
   const location = useLocation();
+  const navigate = useNavigate();
   const navConfig = buildNavConfig(t);
   const navItem = findNavItem(navConfig, location.pathname);
   const { prev, next } = getPrevNext(navConfig, location.pathname);
@@ -214,9 +218,21 @@ export function DocPage({ rawContent = '' }: DocPageProps) {
                 {navItem.section.title}
               </Text>
             )}
-            <Title level={1} style={{ marginTop: 4 }}>
-              {title}
-            </Title>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+              <Title level={1} style={{ marginTop: 4, flex: 1 }}>
+                {title}
+              </Title>
+              {editPath && (
+                <Button
+                  type="default"
+                  icon={<EditOutlined />}
+                  onClick={() => navigate(editPath)}
+                  style={{ marginTop: 8, marginLeft: 16, flexShrink: 0 }}
+                >
+                  Edit
+                </Button>
+              )}
+            </div>
             {summary && (
               <Paragraph style={{ fontSize: 16, color: '#595959', lineHeight: 1.75 }}>
                 {summary}

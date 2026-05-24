@@ -211,3 +211,127 @@ docs/**/*.md
 - 本地开发：`npm run dev`（热重载）
 - 生产构建：`npm run build`（静态输出到 `dist/`）
 - CI 触发：未来可与 RunDoc 引擎结合，在补丁应用后自动触发重新构建
+
+## 3) 数据库层（新增）
+
+```text
+┌─────────────────────────────────────────┐
+│              Kysely (类型安全 ORM)        │
+│                   ↕                      │
+│           better-sqlite3 (驱动)           │
+│                   ↕                      │
+│            SQLite (WAL 模式)              │
+│          rundoc.db (默认路径)             │
+└─────────────────────────────────────────┘
+```
+
+**技术选型理由：**
+
+- **SQLite**：零配置、嵌入式、单文件，适合文档管理场景，无需独立数据库服务
+- **Kysely**：TypeScript 优先的 SQL 查询构建器，提供完整类型推断，避免 SQL 注入
+- **better-sqlite3**：同步 API 设计，性能优异，支持 WAL 模式提升并发能力
+
+**数据库表结构：**
+
+| 表名 | 说明 | 核心字段 |
+|------|------|---------|
+| `projects` | 项目 | id, slug_id, name, description, git_repo_url, status, created_at, updated_at |
+| `documents` | 文档 | id, slug_id, title, content, project_id, parent_doc_id, status, position, last_updated_by, created_at, updated_at |
+| `document_history` | 版本历史 | id, document_id, title, content, changed_by, change_summary, created_at |
+
+**迁移机制：**
+- 迁移文件位于 `server/src/database/migrations/`
+- 服务启动时自动执行 `migrateToLatest()`，确保数据库结构与代码同步
+- 迁移记录存储在 `kysely_migration` 表中，支持增量升级
+
+## 4) API 层（新增）
+
+```text
+┌─────────────────────────────────────────┐
+│           Hono (轻量 Web 框架)            │
+│                   ↕                      │
+│     /api/projects      (项目 CRUD)        │
+│     /api/projects/:id/docs  (文档 CRUD)   │
+│     /auth              (OIDC 认证)        │
+│     /health            (健康检查)          │
+└─────────────────────────────────────────┘
+```
+
+**技术选型：** Hono —— 轻量、快速、TypeScript 原生的 Web 框架，支持多种运行时（Node.js、Deno、Bun、Cloudflare Workers）。
+
+**API 路由结构：**
+
+```text
+# 项目
+POST   /api/projects           创建项目
+GET    /api/projects           列出项目（支持 ?workspace_id 筛选）
+GET    /api/projects/:id       获取项目（支持 id 或 slug_id）
+PUT    /api/projects/:id       更新项目
+DELETE /api/projects/:id       归档项目（软删除）
+
+# 文档
+POST   /api/projects/:projectId/docs        创建文档
+GET    /api/projects/:projectId/docs        列出项目下的文档
+GET    /api/projects/:projectId/docs/:docId  获取文档（含版本历史）
+PUT    /api/projects/:projectId/docs/:docId  更新文档（自动保存快照）
+DELETE /api/projects/:projectId/docs/:docId  删除文档（软删除）
+GET    /api/projects/:projectId/docs/:docId/history  获取版本历史
+```
+
+**认证机制：** 所有 `/api/*` 路由受 OIDC 认证中间件保护，通过 JWT Bearer Token 验证身份。`/docs/*` 静态文档路由无需认证。
+
+## 5) 共享编辑器（新增）
+
+```text
+@runos/editor-markdown (TipTap 3 内核)
+  -> src/components/MarkdownEditor.tsx
+  -> DocEditPage (编辑页面)
+  -> 工具栏 + 分屏预览 + 自动保存
+```
+
+编辑器作为独立包 `@runos/editor-markdown` 维护，基于 TipTap 3 构建，可跨项目复用。在 RunDoc 前端中通过 `MarkdownEditor` 组件集成，提供：
+
+- **Markdown 快捷工具栏**：粗体、斜体、标题、列表、代码块、引用、链接等
+- **分屏布局**：左侧编辑区，右侧实时预览
+- **保存流程**：调用 `PUT /api/projects/:id/docs/:id` 接口，附带 `change_summary`
+
+## 6) 前端页面架构
+
+```text
+HashRouter
+  /                         HomePage（首页入口）
+  /docs/*                   DocPage（静态文档浏览，构建时内联）
+  /projects                 ProjectListPage（项目列表）
+  /projects/:projectId      ProjectDetailPage（项目详情 + 文档树）
+  /projects/:projectId/docs/:docId    DocViewPage（文档阅读）
+  /projects/:projectId/docs/:docId/edit  DocEditPage（文档编辑）
+```
+
+**组件层级：**
+
+| 组件 | 用途 |
+|------|------|
+| `Header` | 顶部导航栏，含菜单切换 |
+| `Sidebar` | 侧边栏，文档树导航 |
+| `DocTree` | 递归文档树组件，支持嵌套文档展示 |
+| `ProjectCard` | 项目卡片，展示于项目列表页 |
+| `CreateProjectModal` | 创建项目的弹窗表单 |
+| `CreateDocModal` | 创建文档的弹窗表单 |
+| `MarkdownEditor` | 共享编辑器组件封装 |
+| `TOC` | 文档内目录导航 |
+
+## 7) 静态文档与项目文档的共存
+
+RunDoc 前端同时服务于两类文档内容，它们通过路由清晰分离：
+
+| 路由 | 内容来源 | 数据获取方式 |
+|------|---------|-------------|
+| `/docs/*` | `docs/` 目录中的静态 Markdown 文件 | 构建时通过 `build-docs.mjs` 编译为 TS 模块，零网络开销 |
+| `/projects/:id/docs/*` | SQLite 数据库中的项目文档 | 运行时通过 REST API 动态获取 |
+
+**共存设计要点：**
+
+1. **路由隔离**：`/docs/*` 负责静态文档站（产品文档、技术规范等），`/projects/*` 负责项目维度的动态文档管理
+2. **构建时 vs 运行时**：静态文档在构建时编译，适合发布性内容；项目文档在运行时存取，适合协作性内容
+3. **统一的 Markdown 格式**：两者使用相同的 Markdown 语法和渲染管线（`react-markdown` + `remark-gfm`），保证一致的阅读体验
+4. **认证差异**：静态文档公开可读；项目文档的 API 操作需认证，读写权限由后端中间件控制
